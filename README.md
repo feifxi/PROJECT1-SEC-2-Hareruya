@@ -1,2 +1,2 @@
-# PROJECT1-SEC-2-Hareruya
+# PROJECT1-SEC-2-Hareluya
 This Project name is spell wrong😭😭
