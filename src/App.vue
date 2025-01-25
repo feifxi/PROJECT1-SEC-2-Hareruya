@@ -13,7 +13,7 @@
         <canvas className="bg-blue-100 border-b-[15px] border-b-orange-950 "></canvas>
 
         <button className="btn mt-4" onClick={resetGame}>
-          Reset Game eiei
+          Reset Game helloworld
         </button>
       </div>
     </section>
