@@ -6,6 +6,9 @@ import treeImgSrc from "./assets/image/tree.png";
 const showHomePage = ref(true);
 const canvas = ref(null);
 const score = ref(0);
+// For clean up interval and others when game game end
+let gameCleanup = null
+
 
 const initializeGame = () => {
   // Canvas Setup
@@ -120,7 +123,7 @@ const initializeGame = () => {
 
   const handleKeydown = (e) => {
     if (e.code === "Space" && player.y < playerY) {
-      resetGame();
+      resetStart();
     } else if (e.code === "KeyW" && player.y === playerY) {
       velocityY = -10;
     } else if (e.code === "KeyS" && player.y < playerY) {
@@ -147,18 +150,16 @@ const initializeGame = () => {
   };
 };
 
-const resetGame = () => {
-  // Stop any existing game
+const endGame = () => {
   gameCleanup();
-  
-  // นับ score ใหม่ และเซท clecup ฟังก์ชันสำหรับเกมถัดไป
   score.value = 0;
+}
+
+// หยุดเกม , เริ่มเกมใหม่ และ เซท clean up ฟังก์ชันสำหรับเกมถัดไป
+const resetStart = () => {
+  endGame();
   gameCleanup = initializeGame();
 };
-
-// เริ่มเกม
-let gameCleanup = null
-
 
 const handleStartGame = () => {
   showHomePage.value = false
@@ -167,7 +168,7 @@ const handleStartGame = () => {
 
 const handleBackHome = () => {
   showHomePage.value = true
-  resetGame();
+  endGame();
 }
 </script>
 
