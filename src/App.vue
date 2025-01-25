@@ -15,6 +15,10 @@
         <button className="btn mt-4" onClick={resetGame}>
           Reset Game 1234
         </button>
+        <div id="Totorial">
+          <button class="btn btn-primary" onclick="ToB"> ? </button>
+          <div id="Totorial-C">Totorial-content</div>
+        </div>
       </div>
     </section>
 </template>
