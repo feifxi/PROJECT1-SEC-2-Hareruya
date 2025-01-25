@@ -1,3 +1,15 @@
 # PROJECT1-SEC-2-Hareluya
-This Project name is spell wrong😭😭
-What should we do? 😎😎
+
+Project 2D Game referece by Chrome Dinosaur Game
+
+<img src="https://github.com/user-attachments/assets/1f5fed11-728f-44f8-a254-980928409c30" alt="Alt text" width="300" />
+
+
+## Responsibilities
+- Main Game Logic using Canvas -> (66125-Suchai, 66100-Nitikorn)
+- Status Game State
+- Data Store Management (Player Items, Score) 
+- Shop Page & Item in shop 
+- Change Map Page
+- Good User Experiece (How to play, Tutorial Modal)
+- Other Assets (Image, Audio)
