@@ -8,8 +8,9 @@ Project 2D Game referece by Chrome Dinosaur Game
 ## Responsibilities
 - Main Game Logic using Canvas -> (66125-Suchai, 66100-Nitikorn)
 - Status Game State
-- Data Store Management (Player Items, Score) 
+- Data Store Management with localstorage (Player Items, Score etc.) 
 - Shop Page & Item in shop 
-- Change Map Page
+- Change Map Page & Logic
+- Cahnge Skin Page & Logic
 - Good User Experiece (How to play, Tutorial Modal)
 - Other Assets (Image, Audio)
