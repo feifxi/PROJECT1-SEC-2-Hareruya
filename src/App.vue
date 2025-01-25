@@ -9,7 +9,6 @@ const score = ref(0);
 // For clean up interval and others when game game end
 let gameCleanup = null
 
-
 const initializeGame = () => {
   // Canvas Setup
   const context = canvas.value.getContext("2d");
@@ -58,7 +57,6 @@ const initializeGame = () => {
   const update = () => {
     if (gameover) return;
     animationFrameId = requestAnimationFrame(update);
-    
     context.clearRect(0, 0, boardW, boardH);
 
     // Handle Player Object
@@ -70,6 +68,7 @@ const initializeGame = () => {
       const tree = treeArray[i];
       tree.x += treeSpeed;
       context.drawImage(tree.img, tree.x, tree.y, tree.w, tree.h);
+
       // Collision checking
       if (onEnemieCollision(player, tree)) {
         gameover = true;
@@ -78,6 +77,7 @@ const initializeGame = () => {
         context.fillText("Game Over!", boardW / 2, boardH / 2);
         cancelAnimationFrame(animationFrameId);
       }
+
       if (onScoreCollision(player, tree)) {
         score.value++;
       }
@@ -101,6 +101,7 @@ const initializeGame = () => {
       treeArray.shift();
     }
   }, 1000);
+
   // เพิ่มความเร็วของ Enemy ขึ้น 0.5 ทุกๆ 1 วิ
   speedInterval = setInterval(() => {
     if (!gameover) {
@@ -117,13 +118,14 @@ const initializeGame = () => {
       obj1.y + obj1.h > obj2.y
     );
   }
+
   function onScoreCollision(obj1, obj2) {
     return obj1.x < obj2.x + obj2.w && obj1.x + obj1.w > obj2.x;
   }
 
   const handleKeydown = (e) => {
     if (e.code === "Space" && player.y < playerY) {
-      resetStart();
+      restartGame();
     } else if (e.code === "KeyW" && player.y === playerY) {
       velocityY = -10;
     } else if (e.code === "KeyS" && player.y < playerY) {
@@ -156,7 +158,7 @@ const endGame = () => {
 }
 
 // หยุดเกม , เริ่มเกมใหม่ และ เซท clean up ฟังก์ชันสำหรับเกมถัดไป
-const resetStart = () => {
+const restartGame = () => {
   endGame();
   gameCleanup = initializeGame();
 };
@@ -172,13 +174,11 @@ const handleBackHome = () => {
 }
 </script>
 
-
 <template>
   <!-- Home Page -->
   <section 
     v-if="showHomePage"
-    class=" bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class=" bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div class="w-full max-w-xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
       <h1 class="text-4xl font-bold text-center">Home Page</h1>
       <button class="btn mt-4 bg-black/80 py-8 px-16 text-white rounded active:bg-black/50" @click="handleStartGame">
