@@ -3,7 +3,32 @@ import { ref } from 'vue';
 import playerImgSrc from "./assets/image/player.png";
 import treeImgSrc from "./assets/image/tree.png";
 
+const savedData = localStorage.getItem('gameData')  // retrive data from localstorage if exist 
+// Game Data State
+const gameData = ref(
+  savedData ? JSON.parse(savedData) : 
+  {
+    highScore: 0,
+    money: 0,
+    skin: {
+      equipped: playerImgSrc,
+      owned: [],
+    },
+    playerSkills: {
+      extraScore: false,
+      shotgunSkill: 0,
+    }
+  }
+)
+// Example of using gameData state 
+console.log('Highscore :', gameData.value.highScore)
+// Save Game Data before player exit
+window.addEventListener('beforeunload',(e) => {
+  localStorage.setItem('gameData',JSON.stringify(gameData.value))
+})
+
 const showHomePage = ref(true);
+const showShopPage = ref(false);
 const canvas = ref(null);
 const score = ref(0);
 // Function For clean up interval and others when game is ended
@@ -22,17 +47,17 @@ const initializeGame = () => {
   const player = {
     w: 64,
     h: 64,
-    x: 50, 
+    x: 50,
     y: boardH - 64,  // start at the ground
     baseY: boardH - 64, // ground postion of player (board height - player height)
     img: new Image(),
     skill: {
       ghostMode: false,
-      clearMap: 3,
-    }
+      shotgunSkill: gameData.value.playerSkills.shotgunSkill,
+      extraScore: false,
+    },
   };
-  player.img.src = playerImgSrc
-
+  player.img.src = gameData.value.skin.equipped;
 
   // Enemy Model Setup
   const treeModel = {
@@ -129,19 +154,16 @@ const initializeGame = () => {
       physics.velocityY = -10;
     } else if ((e.code === "KeyS") && (player.y < player.baseY)) {
       physics.velocityY = 30;
-    } else if ((e.code === "KeyQ") && (true)) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
-      if (player.skill.clearMap > 0) {
-        enemyArray.splice(0, enemyArray.length);
-        player.skill.clearMap-- 
-        console.log('Active Skill : Clear Map, Left : ' + player.skill.clearMap);
-      }
+    } else if ((e.code === "KeyQ") && ((player.skill.shotgunSkill > 0) && (player.skill.shotgunSkill <= 3))) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
+      enemyArray.splice(0, enemyArray.length);
+      player.skill.shotgunSkill = --gameData.value.playerSkills.shotgunSkill;
     } else if ((e.code === "KeyE" && !player.skill.ghostMode && (true))) { // add more condition Eg. if in cooldown state cant use this
       player.skill.ghostMode = true
       setTimeout(()=>{
         player.skill.ghostMode = false
-        console.log('Deactive Skill : Ghost Mode after 5 sec');
+        console.log('Deactive Skill : Ghost Mode after 5 sec'); // Debug Ghost Skill
       }, 5000)
-      console.log('Active Skill : Ghost Mode');
+      console.log('Active Skill : Ghost Mode'); // Debug Ghost Skill
     }
   };
 
@@ -181,6 +203,24 @@ const handleBackHome = () => {
   showHomePage.value = true
   endGame();
 }
+
+const handleOpenShop = () => {
+  showShopPage.value = true;
+  endGame();
+}
+
+const handleCloseShop = () => {
+  showShopPage.value = false;
+  gameCleanup = initializeGame();
+}
+
+// Shop
+// Shotgun Ammo
+const handleShotgunSkill = () => {
+  if (gameData.value.playerSkills.shotgunSkill < 3) {
+    gameData.value.playerSkills.shotgunSkill++;
+  }
+}
 </script>
 
 <template>
@@ -211,6 +251,34 @@ const handleBackHome = () => {
 
       <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleBackHome">
         Back to home
+      </button>
+      <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleOpenShop">
+        Shop
+      </button>
+      <!-- Debug highscore -->
+      <!-- <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="gameData = null">
+        Test
+      </button> -->
+    </div>
+  </section>
+
+  <!-- Shop Page -->
+  <section
+    v-if="showShopPage"
+    class=" bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+    <div class="w-full max-w-xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
+      <button
+        class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
+        @click="handleCloseShop">
+        Close
+      </button>
+      <h1>Shop</h1>
+      <h4>Shotgun Ammo</h4>
+      <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
+      <button
+        class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
+        @click="handleShotgunSkill">
+        Buy
       </button>
     </div>
   </section>
