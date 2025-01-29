@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref  } from 'vue';
 import playerImgSrc from "./assets/image/player.png";
 import treeImgSrc from "./assets/image/tree.png";
+import TotorialData from "../data/TotorialData.json"
+
 
 const savedData = localStorage.getItem('gameData')  // retrive data from localstorage if exist 
 // Game Data State
@@ -29,6 +31,7 @@ window.addEventListener('beforeunload',(e) => {
 
 const showHomePage = ref(true);
 const showShopPage = ref(false);
+const showTotorial = ref(false)
 const canvas = ref(null);
 const score = ref(0);
 // Function For clean up interval and others when game is ended
@@ -214,6 +217,32 @@ const handleCloseShop = () => {
   gameCleanup = initializeGame();
 }
 
+const handleOpenTotorial = () => {
+  showTotorial.value = true;
+  endGame()
+}
+
+const scrollslide = ref(null)
+const goright = () => {
+  if (scrollslide.value) {
+    scrollslide.value.scrollLeft += 550;
+  }
+};
+const goleft = () => {
+  if (scrollslide.value) {
+    scrollslide.value.scrollLeft -= 550;
+  }
+};
+
+const TotorialListClass = {
+  ul: "max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth",
+  li: "list-style-none group min-w-150  my-auto  snap-start object-cover",
+  bigDiv: "w-full rounded-xl p-3 bg-white text-none border-1 hover:border-blue-300 flex flex-col",
+  img: "w-full rounded-lg aspect-video object-cover",
+  h2: " text-lg text-black font-semibold",
+  buttDiv: "my-3 flex flex-row justify-around",
+  butt: " h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"  
+}
 // Shop
 // Shotgun Ammo
 const handleShotgunSkill = () => {
@@ -221,6 +250,7 @@ const handleShotgunSkill = () => {
     gameData.value.playerSkills.shotgunSkill++;
   }
 }
+
 </script>
 
 <template>
@@ -235,10 +265,12 @@ const handleShotgunSkill = () => {
       </button>
     </div>
   </section>
+
   
   <!-- Game Page -->
   <section 
     class="bg-base-100 max-w-screen-xl mx-auto py-14">
+    <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTotorial">?</button>
     <div class="mx-auto flex flex-col items-center">
       <h1 class="text-3xl mb-5">Score: {{ score }}</h1>
       <canvas 
@@ -282,8 +314,68 @@ const handleShotgunSkill = () => {
       </button>
     </div>
   </section>
+
+  
+  <!-- Totorial Page -->
+   <section v-if="showTotorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+  <div class="container flex h-full my-auto items-center justify-center" id="container">
+    <div class="" id="slide-wrapper">
+      <ul :class="TotorialListClass.ul" id="slide-list" ref="scrollslide" >
+        <li :class="TotorialListClass.li" id="slide-item1" >
+          <div :class="TotorialListClass.bigDiv" id="slide-link"> 
+            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
+            <p class=" text-blue-500 font-medium px-2 py-1 mx-1 my-2 bg-blue-100 rounded-full w-fit border-1 text-xs" id="badge">
+              How to play
+            </p>
+            <h2 :class="TotorialListClass.h2" id="slide-title">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil</h2>
+              <div :class="TotorialListClass.buttDiv">
+                <button v-on:click="goleft" :class="TotorialListClass.butt"><</button>
+                <button v-on:click="goright" :class="TotorialListClass.butt">></button>
+              </div>
+        </div>
+        </li>
+        <li :class="TotorialListClass.li" id="slide-item2">
+          <div :class="TotorialListClass.bigDiv"  id="slide-link">
+            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
+            <p class=" text-red-500 font-medium px-2 py-1 mx-1 my-2 bg-red-100 rounded-full w-fit border-1 text-xs" id="badge">Score?</p>
+            <h2 :class="TotorialListClass.h2"  id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
+            <div :class="TotorialListClass.buttDiv" >
+              <button v-on:click="goleft" :class="TotorialListClass.butt" ><</button>
+              <button v-on:click="goright" :class="TotorialListClass.butt" >></button>
+            </div>
+          </div>
+        </li>
+        <li :class="TotorialListClass.li" id="slide-item3">
+          <div :class="TotorialListClass.bigDiv"  id="slide-link">
+            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
+            <p class=" text-green-500 font-medium px-2 py-1 mx-1 my-2 bg-green-100 rounded-full w-fit border-1 text-xs" id="badge">Skill?</p>
+            <h2 :class="TotorialListClass.h2"  id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
+            <div :class="TotorialListClass.buttDiv" >
+              <button v-on:click="goleft" :class="TotorialListClass.butt" ><</button>
+              <button v-on:click="goright" :class="TotorialListClass.butt" >></button>
+            </div>
+          </div>
+        </li>
+        <li :class="TotorialListClass.li" id="slide-item4">
+          <div :class="TotorialListClass.bigDiv" id="slide-link">
+            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
+            <p class=" text-yellow-500 font-medium px-2 py-1 mx-1 my-2 bg-yellow-100 rounded-full w-fit border-1 text-xs" id="badge">Coin and shopping</p>
+            <h2 :class="TotorialListClass.h2" id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
+            <div :class="TotorialListClass.buttDiv" >
+              <button v-on:click="goleft" :class="TotorialListClass.butt"><</button>
+              <button v-on:click="goright" :class="TotorialListClass.butt">></button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+   </section>
 </template>
 
 
 <style scoped>
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
 </style>

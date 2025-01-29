@@ -1,0 +1,17 @@
+[
+{
+    "ID": 1,
+    "Img": "To1.jpg",
+    "Word": "Hello here is information abount this game"
+},
+{
+    "ID": 2,
+    "Img": "To2.jpg",
+    "Word": "This is information about Score and what coin can do"
+},
+{
+    "ID": 3,
+    "Img": "To3.jpg",
+    "Word": "Here is information about skill and scoreboard"
+}
+]
