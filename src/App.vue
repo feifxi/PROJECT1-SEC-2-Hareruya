@@ -206,12 +206,10 @@ const handleShotgunSkill = () => {
         <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleOpenShop">
           Shop
         </button>
-
         <h1 class="text-3xl ml-auto">High Score: {{ gameData.highScore }}</h1>
       </div>
 
       
-
       <div class="relative border">
         <canvas 
           ref="canvas" 
@@ -243,9 +241,7 @@ const handleShotgunSkill = () => {
         <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 " @click="restartGame">
           Restart
         </button>
-        <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="gameData = null">
-          Emergency Reset
-        </button>
+        
       </div>      
     </div>
   </section>

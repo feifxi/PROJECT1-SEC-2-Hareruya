@@ -81,6 +81,7 @@ export const initializeGame = (canvas, gameData) => {
         if (onEnemieCollision(player, tree) && !gameData.value.playerSkills.mugen.active) {
           gameover = true;
           context.font = "normal bold 20px Arial";
+          context.fillStyle = 'black'
           context.textAlign = "center";
           context.fillText("Game Over!", boardW / 2, boardH / 2);
           cancelAnimationFrame(animationFrameId);
