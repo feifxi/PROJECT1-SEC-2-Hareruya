@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref  } from 'vue';
 import playerImgSrc from "./assets/image/player.png";
 import treeImgSrc from "./assets/image/tree.png";
+
 
 const savedData = localStorage.getItem('gameData')  // retrive data from localstorage if exist 
 // Game Data State
@@ -29,6 +30,7 @@ window.addEventListener('beforeunload',(e) => {
 
 const showHomePage = ref(true);
 const showShopPage = ref(false);
+const showTutorial = ref(false)
 const canvas = ref(null);
 const score = ref(0);
 // Function For clean up interval and others when game is ended
@@ -214,6 +216,50 @@ const handleCloseShop = () => {
   gameCleanup = initializeGame();
 }
 
+const handleOpenTutorial = () => {
+  showTutorial.value = true;
+  endGame()
+}
+const handleCloseTutorial = () => {
+  showTutorial.value = false;
+  gameCleanup = initializeGame()
+}
+
+const scrollslide = ref(null)
+const goright = () => {
+  if (scrollslide.value) {
+    scrollslide.value.scrollLeft += 550;
+  }
+};
+const goleft = () => {
+  if (scrollslide.value) {
+    scrollslide.value.scrollLeft -= 550;
+  }
+};
+
+const TutorialData = [
+  {
+    id :1 ,
+    img : "To1.jpg",
+    p1 : "About game",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  },
+  {
+    id :2 ,
+    img : "To2.jpg",
+    p1 : "Skin and skills",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  },
+  {
+    id :3 ,
+    img : "To3.jpg",
+    p1 : "Scoreboard",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  }
+]
 // Shop
 // Shotgun Ammo
 const handleShotgunSkill = () => {
@@ -221,6 +267,7 @@ const handleShotgunSkill = () => {
     gameData.value.playerSkills.shotgunSkill++;
   }
 }
+
 </script>
 
 <template>
@@ -235,10 +282,12 @@ const handleShotgunSkill = () => {
       </button>
     </div>
   </section>
+
   
   <!-- Game Page -->
   <section 
     class="bg-base-100 max-w-screen-xl mx-auto py-14">
+    <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">?</button>
     <div class="mx-auto flex flex-col items-center">
       <h1 class="text-3xl mb-5">Score: {{ score }}</h1>
       <canvas 
@@ -282,8 +331,40 @@ const handleShotgunSkill = () => {
       </button>
     </div>
   </section>
+
+  
+  <!-- Tutorial Page -->
+   <section v-if="showTutorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+  <div class="container flex h-full my-auto items-center justify-center" id="container">
+    <div class="" id="slide-wrapper">
+      <ul class="max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth" id="slide-list" ref="scrollslide">
+        <li class="list-style-none group min-w-150  my-auto  snap-start object-cover" id="slide-item1" v-for="data in TutorialData" :key="data.id" >
+          <div class="w-full rounded-xl p-3 bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col" id="slide-link"> 
+            <img :src="`/src/assets/image/${data.img}`" class="w-full rounded-lg aspect-video object-cover mb-3" id="slide-image" >
+            <p class=" text-blue-500 font-medium px-2 py-1 mx-1  mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs" id="badge">
+              {{ data.p1 }}
+            </p>
+            <h2 class="text-lg text-black font-semibold" id="slide-title">{{ data.p2 }}</h2>
+            <div class="flex flex-col">
+              <div class="my-3 flex flex-row justify-around">
+                <button v-on:click="goleft" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"><</button>
+                <button v-on:click="goright" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">></button>
+              </div>
+              <div class="justify-center align-center flex flex-row">
+                <button @click="handleCloseTutorial" class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white ">back</button>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+   </section>
 </template>
 
 
 <style scoped>
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
 </style>
