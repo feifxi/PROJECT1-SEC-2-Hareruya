@@ -221,6 +221,9 @@ const handleOpenTotorial = () => {
   showTotorial.value = true;
   endGame()
 }
+const handleCloseTutorial = () => {
+  gameCleanup = initializeGame()
+}
 
 const scrollslide = ref(null)
 const goright = () => {
@@ -234,15 +237,29 @@ const goleft = () => {
   }
 };
 
-const TotorialListClass = {
-  ul: "max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth",
-  li: "list-style-none group min-w-150  my-auto  snap-start object-cover",
-  bigDiv: "w-full rounded-xl p-3 bg-white text-none border-1 hover:border-blue-300 flex flex-col",
-  img: "w-full rounded-lg aspect-video object-cover",
-  h2: " text-lg text-black font-semibold",
-  buttDiv: "my-3 flex flex-row justify-around",
-  butt: " h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"  
-}
+const TutorialData = [
+  {
+    id :1 ,
+    img : "To1.jpg",
+    p1 : "About game",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  },
+  {
+    id :2 ,
+    img : "To2.jpg",
+    p1 : "Skin and skills",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  },
+  {
+    id :3 ,
+    img : "To3.jpg",
+    p1 : "Scoreboard",
+    p2 : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil"
+
+  }
+]
 // Shop
 // Shotgun Ammo
 const handleShotgunSkill = () => {
@@ -320,53 +337,21 @@ const handleShotgunSkill = () => {
    <section v-if="showTotorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
   <div class="container flex h-full my-auto items-center justify-center" id="container">
     <div class="" id="slide-wrapper">
-      <ul :class="TotorialListClass.ul" id="slide-list" ref="scrollslide" >
-        <li :class="TotorialListClass.li" id="slide-item1" >
-          <div :class="TotorialListClass.bigDiv" id="slide-link"> 
-            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
-            <p class=" text-blue-500 font-medium px-2 py-1 mx-1 my-2 bg-blue-100 rounded-full w-fit border-1 text-xs" id="badge">
-              How to play
+      <ul class="max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth" id="slide-list" ref="scrollslide">
+        <li class="list-style-none group min-w-150  my-auto  snap-start object-cover" id="slide-item1" v-for="data in TutorialData" :key="data.id" >
+          <div class="w-full rounded-xl p-3 bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col" id="slide-link"> 
+            <img :src="`/src/assets/image/${data.img}`" class="w-full rounded-lg aspect-video object-cover mb-3" id="slide-image" >
+            <p class=" text-blue-500 font-medium px-2 py-1 mx-1  mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs" id="badge">
+              {{ data.p1 }}
             </p>
-            <h2 :class="TotorialListClass.h2" id="slide-title">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil</h2>
-              <div :class="TotorialListClass.buttDiv">
-                <button v-on:click="goleft" :class="TotorialListClass.butt"><</button>
-                <button v-on:click="goright" :class="TotorialListClass.butt">></button>
+            <h2 class="text-lg text-black font-semibold" id="slide-title">{{ data.p2 }}</h2>
+              <div class="my-3 flex flex-row justify-around">
+                <button v-on:click="goleft" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"><</button>
+                <button v-on:click="goright" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">></button>
               </div>
         </div>
         </li>
-        <li :class="TotorialListClass.li" id="slide-item2">
-          <div :class="TotorialListClass.bigDiv"  id="slide-link">
-            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
-            <p class=" text-red-500 font-medium px-2 py-1 mx-1 my-2 bg-red-100 rounded-full w-fit border-1 text-xs" id="badge">Score?</p>
-            <h2 :class="TotorialListClass.h2"  id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
-            <div :class="TotorialListClass.buttDiv" >
-              <button v-on:click="goleft" :class="TotorialListClass.butt" ><</button>
-              <button v-on:click="goright" :class="TotorialListClass.butt" >></button>
-            </div>
-          </div>
-        </li>
-        <li :class="TotorialListClass.li" id="slide-item3">
-          <div :class="TotorialListClass.bigDiv"  id="slide-link">
-            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
-            <p class=" text-green-500 font-medium px-2 py-1 mx-1 my-2 bg-green-100 rounded-full w-fit border-1 text-xs" id="badge">Skill?</p>
-            <h2 :class="TotorialListClass.h2"  id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
-            <div :class="TotorialListClass.buttDiv" >
-              <button v-on:click="goleft" :class="TotorialListClass.butt" ><</button>
-              <button v-on:click="goright" :class="TotorialListClass.butt" >></button>
-            </div>
-          </div>
-        </li>
-        <li :class="TotorialListClass.li" id="slide-item4">
-          <div :class="TotorialListClass.bigDiv" id="slide-link">
-            <img src="/src/assets/image/To1.jpg" :class="TotorialListClass.img" alt="slide image" id="slide-image" >
-            <p class=" text-yellow-500 font-medium px-2 py-1 mx-1 my-2 bg-yellow-100 rounded-full w-fit border-1 text-xs" id="badge">Coin and shopping</p>
-            <h2 :class="TotorialListClass.h2" id="slide-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit.Tempore, sint</h2>
-            <div :class="TotorialListClass.buttDiv" >
-              <button v-on:click="goleft" :class="TotorialListClass.butt"><</button>
-              <button v-on:click="goright" :class="TotorialListClass.butt">></button>
-            </div>
-          </div>
-        </li>
+        <button class="" @click="handleCloseTutorial">back</button>
       </ul>
     </div>
   </div>
