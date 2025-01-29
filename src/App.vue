@@ -16,8 +16,9 @@ const gameData = ref(
       owned: [],
     },
     playerSkills: {
-      extraScore: false,
-      shotgunSkill: 0,
+      extraScore: false,  // have extra score
+      shotgunSkill: 0,  // number of bullet
+      mugen: false,   // is on mugen mode or not
     }
   }
 )
@@ -28,9 +29,8 @@ window.addEventListener('beforeunload',(e) => {
   localStorage.setItem('gameData',JSON.stringify(gameData.value))
 })
 
-const showHomePage = ref(true);
-const showShopPage = ref(false);
-const showTutorial = ref(false)
+const page = ref('home');
+
 const canvas = ref(null);
 const score = ref(0);
 // Function For clean up interval and others when game is ended
@@ -39,8 +39,8 @@ let gameCleanup = null
 const initializeGame = () => {
   // Canvas Setup
   const context = canvas.value.getContext("2d");
-  const boardW = 800;
-  const boardH = 300;
+  const boardW = 1000;
+  const boardH = 450;
   
   canvas.value.width = boardW;
   canvas.value.height = boardH;
@@ -52,12 +52,7 @@ const initializeGame = () => {
     x: 50,
     y: boardH - 64,  // start at the ground
     baseY: boardH - 64, // ground postion of player (board height - player height)
-    img: new Image(),
-    skill: {
-      ghostMode: false,
-      shotgunSkill: gameData.value.playerSkills.shotgunSkill,
-      extraScore: false,
-    },
+    img: new Image()
   };
   player.img.src = gameData.value.skin.equipped;
 
@@ -106,7 +101,7 @@ const initializeGame = () => {
       context.drawImage(tree.img, tree.x, tree.y, tree.w, tree.h);
 
       // Collision checking
-      if (onEnemieCollision(player, tree) && !player.skill.ghostMode) {
+      if (onEnemieCollision(player, tree) && !gameData.value.playerSkills.mugen) {
         gameover = true;
         context.font = "normal bold 20px Arial";
         context.textAlign = "center";
@@ -152,17 +147,19 @@ const initializeGame = () => {
   const handleKeydown = (e) => {
     if (e.code === "Space") {
       restartGame();
+    } else if (gameover) {
+      return;
     } else if ((e.code === "KeyW") && (player.y === player.baseY)) {
       physics.velocityY = -10;
     } else if ((e.code === "KeyS") && (player.y < player.baseY)) {
       physics.velocityY = 30;
-    } else if ((e.code === "KeyQ") && ((player.skill.shotgunSkill > 0) && (player.skill.shotgunSkill <= 3))) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
+    } else if ((e.code === "KeyQ") && ((gameData.value.playerSkills.shotgunSkill > 0) && (gameData.value.playerSkills.shotgunSkill <= 3))) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
       enemyArray.splice(0, enemyArray.length);
-      player.skill.shotgunSkill = --gameData.value.playerSkills.shotgunSkill;
-    } else if ((e.code === "KeyE" && !player.skill.ghostMode && (true))) { // add more condition Eg. if in cooldown state cant use this
-      player.skill.ghostMode = true
+      gameData.value.playerSkills.shotgunSkill -= 1;
+    } else if ((e.code === "KeyE" && !gameData.value.playerSkills.mugen && (true))) { // add more condition Eg. if in cooldown state cant use this
+      gameData.value.playerSkills.mugen = true
       setTimeout(()=>{
-        player.skill.ghostMode = false
+        gameData.value.playerSkills.mugen = false
         console.log('Deactive Skill : Ghost Mode after 5 sec'); // Debug Ghost Skill
       }, 5000)
       console.log('Active Skill : Ghost Mode'); // Debug Ghost Skill
@@ -197,32 +194,31 @@ const restartGame = () => {
 
 // Page Handler
 const handleStartGame = () => {
-  showHomePage.value = false
+  page.value = 'game'
   gameCleanup = initializeGame();
 }
 
 const handleBackHome = () => {
-  showHomePage.value = true
+  page.value = 'home'
   endGame();
 }
 
 const handleOpenShop = () => {
-  showShopPage.value = true;
+  page.value = 'shop'
   endGame();
 }
 
 const handleCloseShop = () => {
-  showShopPage.value = false;
+  page.value = 'game'
   gameCleanup = initializeGame();
 }
 
 const handleOpenTutorial = () => {
-  showTutorial.value = true;
+  page.value = 'tutorial'
   endGame()
 }
 const handleCloseTutorial = () => {
-  showTutorial.value = false;
-  gameCleanup = initializeGame()
+  page.value = 'home'
 }
 
 const scrollslide = ref(null)
@@ -273,75 +269,30 @@ const handleShotgunSkill = () => {
 <template>
   <!-- Home Page -->
   <section 
-    v-if="showHomePage"
-    class=" bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
-    <div class="w-full max-w-xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
+    v-if="page === 'home'"
+    class=" z-50  z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+    <div class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
       <h1 class="text-4xl font-bold text-center">Home Page</h1>
       <button class="btn mt-4 bg-black/80 py-8 px-16 text-white rounded active:bg-black/50" @click="handleStartGame">
         Start
       </button>
+
+      <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">
+      ?
+    </button>
     </div>
   </section>
 
-  
-  <!-- Game Page -->
-  <section 
-    class="bg-base-100 max-w-screen-xl mx-auto py-14">
-    <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">?</button>
-    <div class="mx-auto flex flex-col items-center">
-      <h1 class="text-3xl mb-5">Score: {{ score }}</h1>
-      <canvas 
-        ref="canvas" 
-        class="bg-blue-100 border-b-[15px] border-b-orange-950"
-      ></canvas>
-      <h2 class="text-3xl mt-3">
-        Press "Space" to restart
-      </h2>
-
-      <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleBackHome">
-        Back to home
-      </button>
-      <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleOpenShop">
-        Shop
-      </button>
-      <!-- Debug highscore -->
-      <!-- <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="gameData = null">
-        Test
-      </button> -->
-    </div>
-  </section>
-
-  <!-- Shop Page -->
-  <section
-    v-if="showShopPage"
-    class=" bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
-    <div class="w-full max-w-xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
-      <button
-        class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
-        @click="handleCloseShop">
-        Close
-      </button>
-      <h1>Shop</h1>
-      <h4>Shotgun Ammo</h4>
-      <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
-      <button
-        class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-        @click="handleShotgunSkill">
-        Buy
-      </button>
-    </div>
-  </section>
-
-  
   <!-- Tutorial Page -->
-   <section v-if="showTutorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+  <section v-else-if="page === 'tutorial'" 
+    class="z-50 bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
   <div class="container flex h-full my-auto items-center justify-center" id="container">
     <div class="" id="slide-wrapper">
       <ul class="max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth" id="slide-list" ref="scrollslide">
         <li class="list-style-none group min-w-150  my-auto  snap-start object-cover" id="slide-item1" v-for="data in TutorialData" :key="data.id" >
-          <div class="w-full rounded-xl p-3 bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col" id="slide-link"> 
+          <div class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col" id="slide-link"> 
             <img :src="`/src/assets/image/${data.img}`" class="w-full rounded-lg aspect-video object-cover mb-3" id="slide-image" >
-            <p class=" text-blue-500 font-medium px-2 py-1 mx-1  mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs" id="badge">
+            <p class=" text-blue-500 font-medium px-2 py-1 mx-1  mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
               {{ data.p1 }}
             </p>
             <h2 class="text-lg text-black font-semibold" id="slide-title">{{ data.p2 }}</h2>
@@ -360,6 +311,78 @@ const handleShotgunSkill = () => {
     </div>
   </div>
    </section>
+
+  <!-- Shop Page -->
+  <section
+    v-else-if="page === 'shop'"
+    class="z-50 bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+    <div class="w-full max-w-xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
+      <button
+        class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
+        @click="handleCloseShop">
+        Close
+      </button>
+      <h1>Shop</h1>
+      <h4>Shotgun Ammo</h4>
+      <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
+      <button
+        class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
+        @click="handleShotgunSkill">
+        Buy
+      </button>
+    </div>
+  </section>
+
+  
+  
+  <!-- Game Page -->
+  <section 
+    class="bg-base-100 max-w-screen-xl mx-auto flex">
+    <!-- <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">
+      ?
+    </button> -->
+    <div class="mx-auto">
+
+      <div class="flex gap-5 py-5">
+        <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleBackHome">
+          Back to home
+        </button>
+        <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="handleOpenShop">
+          Shop
+        </button>
+
+        <h1 class="text-3xl ml-auto">Score: {{ score }}</h1>
+      </div>
+
+      
+
+      <div class="relative border">
+        <canvas 
+        ref="canvas" 
+        class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
+        > </canvas>
+
+        <div class="absolute top-5 left-5 flex gap-3">
+          <div class="bg-orange-500 rounded-full text-white size-15 flex items-center justify-center">
+            {{ gameData.playerSkills.shotgunSkill }}
+          </div>
+          <div class="bg-orange-500 rounded-full text-white size-15 flex items-center justify-center">
+            {{ gameData.playerSkills.mugen ? 'mugen!!' : 'not mugen' }}
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-3xl mt-3">
+        Press "Space" to restart
+      </h2>
+
+      
+      <!-- Debug highscore -->
+      <!-- <button class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50" @click="gameData = null">
+        Emergency Reset
+      </button> -->
+    </div>
+  </section>
 </template>
 
 
