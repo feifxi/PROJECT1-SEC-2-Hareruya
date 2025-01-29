@@ -2,7 +2,6 @@
 import { ref  } from 'vue';
 import playerImgSrc from "./assets/image/player.png";
 import treeImgSrc from "./assets/image/tree.png";
-import TotorialData from "../data/TotorialData.json"
 
 
 const savedData = localStorage.getItem('gameData')  // retrive data from localstorage if exist 
@@ -31,7 +30,7 @@ window.addEventListener('beforeunload',(e) => {
 
 const showHomePage = ref(true);
 const showShopPage = ref(false);
-const showTotorial = ref(false)
+const showTutorial = ref(false)
 const canvas = ref(null);
 const score = ref(0);
 // Function For clean up interval and others when game is ended
@@ -217,11 +216,12 @@ const handleCloseShop = () => {
   gameCleanup = initializeGame();
 }
 
-const handleOpenTotorial = () => {
-  showTotorial.value = true;
+const handleOpenTutorial = () => {
+  showTutorial.value = true;
   endGame()
 }
 const handleCloseTutorial = () => {
+  showTutorial.value = false;
   gameCleanup = initializeGame()
 }
 
@@ -287,7 +287,7 @@ const handleShotgunSkill = () => {
   <!-- Game Page -->
   <section 
     class="bg-base-100 max-w-screen-xl mx-auto py-14">
-    <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTotorial">?</button>
+    <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">?</button>
     <div class="mx-auto flex flex-col items-center">
       <h1 class="text-3xl mb-5">Score: {{ score }}</h1>
       <canvas 
@@ -333,8 +333,8 @@ const handleShotgunSkill = () => {
   </section>
 
   
-  <!-- Totorial Page -->
-   <section v-if="showTotorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+  <!-- Tutorial Page -->
+   <section v-if="showTutorial" class="bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
   <div class="container flex h-full my-auto items-center justify-center" id="container">
     <div class="" id="slide-wrapper">
       <ul class="max-w-150 h-200 flex my-20 overflow-x-auto aspect-video scrollbar-hidden snap-x scroll-smooth" id="slide-list" ref="scrollslide">
@@ -345,13 +345,17 @@ const handleShotgunSkill = () => {
               {{ data.p1 }}
             </p>
             <h2 class="text-lg text-black font-semibold" id="slide-title">{{ data.p2 }}</h2>
+            <div class="flex flex-col">
               <div class="my-3 flex flex-row justify-around">
                 <button v-on:click="goleft" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"><</button>
                 <button v-on:click="goright" class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">></button>
               </div>
-        </div>
+              <div class="justify-center align-center flex flex-row">
+                <button @click="handleCloseTutorial" class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white ">back</button>
+              </div>
+            </div>
+          </div>
         </li>
-        <button class="" @click="handleCloseTutorial">back</button>
       </ul>
     </div>
   </div>
