@@ -25,7 +25,7 @@ export const initializeGame = (canvas, gameData) => {
     const treeModel = {
         w: 70,
         h: 105,
-        x: 750,
+        x: 920,
         y: boardH - 105,  
         img: new Image(),
         speed: -3   // speed to the left side of canvas
