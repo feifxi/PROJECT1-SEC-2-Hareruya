@@ -126,23 +126,30 @@ export const initializeGame = (canvas, gameData) => {
     const handleKeydown = (e) => {
         if (gameover) {
           return;
-        } else if ((e.code === "KeyW") && (player.y === player.baseY)) {
+        } else if (e.code === "KeyW" && player.y === player.baseY) {
           physics.velocityY = -10;
-        } else if ((e.code === "KeyS") && (player.y < player.baseY)) {
+        } else if (e.code === "KeyS" && player.y < player.baseY) {
           physics.velocityY = 30;
-        } else if ((e.code === "KeyQ") && (gameData.value.playerSkills.shotgunSkill > 0)) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
+        } else if (e.code === "KeyQ" && gameData.value.playerSkills.shotgunSkill > 0) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
           enemyArray.splice(0, enemyArray.length);
           gameData.value.playerSkills.shotgunSkill -= 1;
-        } else if (e.code === "KeyE" && !gameData.value.playerSkills.mugen.active  && gameData.value.playerSkills.mugen.cooldown <= 0) { // add more condition Eg. if in cooldown state cant use this
-            gameData.value.playerSkills.mugen.active = true
+        } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0  && gameData.value.playerSkills.mugen.cooldown <= 0) { // add more condition Eg. if in cooldown state cant use this
+          // Show countdown for active skill
+          gameData.value.playerSkills.mugen.active = 5
+          const clearInt1 = setInterval(()=>{
+            --gameData.value.playerSkills.mugen.active
+            if (gameData.value.playerSkills.mugen.active <= 0) {
+                clearInterval(clearInt1)
+            }
+          }, 1000)
+          // Set Cooldown after deactive skill
           setTimeout(()=>{
-            gameData.value.playerSkills.mugen.active = false
-            // Set Cooldown
+            gameData.value.playerSkills.mugen.active = 0
             gameData.value.playerSkills.mugen.cooldown = 15
-            let clear = setInterval(() => {
+            const clearInt2 = setInterval(() => {
                 --gameData.value.playerSkills.mugen.cooldown
                 if (gameData.value.playerSkills.mugen.cooldown <= 0) {
-                    clearInterval(clear)
+                    clearInterval(clearInt2)
                 }
             }, 1000)
           }, 5000)

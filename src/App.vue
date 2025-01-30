@@ -23,7 +23,7 @@ const gameData = ref(
 );
 // In-memory only skill
 gameData.value.playerSkills.mugen = {
-  active: false,
+  active: 0,
   cooldown: 0,
 };
 
@@ -40,10 +40,13 @@ const startGame = () => {
   endGame = initializeGame(canvas, gameData);
 };
 
-const restartGame = () => {
-  endGame();
-  startGame();
-};
+// Add Restart game event at 'space key'
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && page.value === 'game') {
+    endGame();
+    startGame();
+  }
+})
 
 // Page Handler
 const handleStartGame = () => {
@@ -73,7 +76,11 @@ const handleCloseTutorial = () => {
   page.value = "home";
 };
 
+
+
+// Tutorial Section
 const scrollslide = ref(null);
+
 const goright = () => {
   if (scrollslide.value) {
     scrollslide.value.scrollLeft += 550;
@@ -85,7 +92,6 @@ const goleft = () => {
   }
 };
 
-// Tutorial Section
 const TutorialData = [
   {
     id: 1,
@@ -107,8 +113,9 @@ const TutorialData = [
   },
 ];
 
+
 // Shop Section
-// Random
+// Lucky draw
 const luckyDrawResult = ref("random");
 const luckyDrawItems = [
   { name: "Gojo", percentage: 10 },
@@ -139,7 +146,8 @@ const random = () => {
   }
 };
 
-// Shotgun Ammo
+// Items Shop 
+// - shot gun
 const handleShotgunSkill = () => {
   if (gameData.value.playerSkills.shotgunSkill < 3) {
     gameData.value.playerSkills.shotgunSkill++;
@@ -311,15 +319,15 @@ const handleShotgunSkill = () => {
           <div
             class="rounded-full text-white size-15 flex items-center justify-center"
             :class="
-              gameData.playerSkills.mugen.active
+              gameData.playerSkills.mugen.active > 0
                 ? 'bg-blue-600'
                 : gameData.playerSkills.mugen.cooldown
                 ? 'bg-gray-500'
                 : 'bg-orange-500'
             ">
             {{
-              gameData.playerSkills.mugen.active
-                ? "Mugen!!"
+              gameData.playerSkills.mugen.active > 0
+                ? gameData.playerSkills.mugen.active
                 : gameData.playerSkills.mugen.cooldown > 0
                 ? gameData.playerSkills.mugen.cooldown
                 : "Mugen"
@@ -328,12 +336,8 @@ const handleShotgunSkill = () => {
         </div>
       </div>
 
-      <div class="flex gap-5 mt-5">
-        <button
-          class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="restartGame">
-          Restart
-        </button>
+      <div class="">
+        <h2 class="text-3xl py-5 text-center">Press "Space to restart"</h2>
       </div>
     </div>
   </section>
