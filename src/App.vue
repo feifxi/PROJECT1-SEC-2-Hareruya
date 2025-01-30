@@ -85,6 +85,7 @@ const goleft = () => {
   }
 };
 
+// Tutorial Section
 const TutorialData = [
   {
     id: 1,
@@ -105,10 +106,11 @@ const TutorialData = [
     p2: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil",
   },
 ];
-// Shop
+
+// Shop Section
 // Random
-const result = ref("");
-const reward = [
+const luckyDrawResult = ref("random");
+const luckyDrawItems = [
   { name: "Gojo", percentage: 10 },
   { name: "Jesus", percentage: 20 },
   { name: "Yorch", percentage: 30 },
@@ -117,11 +119,21 @@ const reward = [
 const random = () => {
   const randomNumber = Math.random() * 100;
   let cumulative = 0;
-  for (const i of reward) {
-    cumulative += i.percentage;
+  for (const item of luckyDrawItems) {
+    cumulative += item.percentage;
     if (randomNumber < cumulative) {
-      result.value = i.name;
-      console.log("result:" + result.value);
+      // Display random animation
+      let i = 0
+      const clearInt = setInterval(()=>{
+        if (i < luckyDrawItems.length) {
+          luckyDrawResult.value = luckyDrawItems[i++].name
+        }
+        else i = 0
+      },500)
+      setTimeout(()=>{
+        clearInterval(clearInt)
+        luckyDrawResult.value = item.name // display the result item
+      }, 3000)  // 3 sec
       return;
     }
   }
@@ -219,41 +231,53 @@ const handleShotgunSkill = () => {
   <!-- Shop Page -->
   <section
     v-else-if="page === 'shop'"
-    class="z-50 bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
-    <div
-      class="h-[90%] w-full max-w-4xl border border-white flex flex-col gap-10 items-center p-10 rounded-xl bg-white">
-      <h1>Shop</h1>
-      <h1 class="font-serif text-red-500 text-2xl">FORTUNE!!!</h1>
-      <div>
-        อะกูให้:
-        <div v-if="result">{{ result }}</div>
+    class="z-50 bg-black/50 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
+  >
+    <div class="w-[95%] h-[95%] p-5 rounded-xl bg-white" >
+      <div class="flex justify-between pb-5">
+        <h1 class="text-5xl font-bold">Shop</h1> 
+        <button
+          class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
+          @click="handleCloseShop"
+        >
+          Close
+        </button>
       </div>
-      <button
-        class="btn bg-red-600 py-4 px-8 text-3xl text-white rounded active:bg-red-600/50"
-        @click="random">
-        จัด
-      </button>
+      <div class="flex justify-around">
 
-      <h4>Shotgun Ammo</h4>
-      <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
-      <button
-        class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-        @click="handleShotgunSkill">
-        Buy
-      </button>
-      <button
-        class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
-        @click="handleCloseShop">
-        Close
-      </button>
+        <!-- Lucky draw -->
+        <div class="p-4 flex-1 border">
+          <h2 class="font-serif text-red-500 text-2xl">Lucky Draw</h2>
+          <div class="border p-5 text-center">
+            {{  luckyDrawResult }}
+          </div>
+          <button class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3" @click="random" >
+            Spin
+          </button>
+        </div>
+
+        <!-- Items shop -->
+        <div class="p-4 flex-1 border">
+          <h2>Items Shop</h2>
+          <h2>Shotgun Ammo</h2>
+          <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
+          <button
+            class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
+            @click="handleShotgunSkill">
+            Buy
+          </button>
+          
+        </div>
+
+        <!-- add more... -->
+
+
+      </div>
     </div>
   </section>
 
   <!-- Game Page -->
   <section class="bg-base-100 max-w-screen-xl mx-auto flex">
-    <!-- <button class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded active:bg-black/50 float-right mx-5" @click="handleOpenTutorial">
-      ?
-    </button> -->
     <div class="mx-auto">
       <div class="flex gap-5 py-5">
         <button
