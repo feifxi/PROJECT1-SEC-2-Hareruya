@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import playerImgSrc from "./assets/image/player.png";
+import playerImgSrc from "./assets/image/placeholder.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
@@ -28,9 +28,9 @@ gameData.value.playerSkills.mugen = {
 };
 
 // Save Game Data before player exit
-window.addEventListener("beforeunload", (e) => {
-  localStorage.setItem("gameData", JSON.stringify(gameData.value));
-});
+// window.addEventListener("beforeunload", (e) => {
+//   localStorage.setItem("gameData", JSON.stringify(gameData.value));
+// });
 
 const page = ref("home");
 const canvas = ref(null); // reference t canvas element
@@ -62,11 +62,13 @@ const handleBackHome = () => {
 const handleOpenShop = () => {
   page.value = "shop";
   endGame();
+  luckyDrawResult.value
 };
 
 const handleCloseShop = () => {
   page.value = "game";
   startGame();
+  luckyDrawResult.value = 'random'
 };
 
 const handleOpenTutorial = () => {
@@ -115,10 +117,10 @@ const TutorialData = [
 // Lucky draw
 const luckyDrawResult = ref("random");
 const luckyDrawItems = [
-  { name: "Gojo", percentage: 10 },
-  { name: "Jesus", percentage: 20 },
-  { name: "Yorch", percentage: 30 },
-  { name: "Muhaha", percentage: 40 },
+  { name: "Jesus", percentage: 2 },
+  { name: "Shotgun", percentage: 18 },
+  { name: "ExtraScore", percentage: 30 },
+  { name: "Salt Muhaha", percentage: 50 },
 ];
 const random = () => {
   const randomNumber = Math.random() * 100;
@@ -132,7 +134,7 @@ const random = () => {
         if (i < luckyDrawItems.length) {
           luckyDrawResult.value = luckyDrawItems[i++].name;
         } else i = 0;
-      }, 500);
+      }, 100);
       setTimeout(() => {
         clearInterval(clearInt);
         luckyDrawResult.value = item.name; // display the result item

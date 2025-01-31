@@ -1,5 +1,6 @@
 import { onEnemieCollision, onScoreCollision } from "./collision";
 import treeImgSrc from "../assets/image/tree.png";
+import shotgunImgSrc from "../assets/image/shotgun.png";
 
 export const initializeGame = (canvas, gameData) => {
     // Canvas Setup
@@ -10,16 +11,23 @@ export const initializeGame = (canvas, gameData) => {
     canvas.value.width = boardW;
     canvas.value.height = boardH;    
 
-    // Player Model Setup (w,h is for player size x,y is for player position)
+    // Player Model Setup 
+    // Img
+    const defaultImg = new Image()
+    defaultImg.src = gameData.value.skin.equipped;
+
+    const shotgun = new Image()
+    shotgun.src = shotgunImgSrc
+
     const player = {
-        w: 64,
-        h: 64,
-        x: 50,
-        y: boardH - 64,  // start at the ground
-        baseY: boardH - 64, // ground postion of player (board height - player height)
-        img: new Image()
+      w: 62,
+      h: 76,
+      x: 50,
+      y: boardH - 76,  // start at the ground
+      baseY: boardH - 76, // ground postion of player (board height - player height)
+      img: defaultImg,
     };
-    player.img.src = gameData.value.skin.equipped;
+    
 
     // Enemy Model Setup
     const treeModel = {
@@ -30,7 +38,7 @@ export const initializeGame = (canvas, gameData) => {
         img: new Image(),
         speed: -3   // speed to the left side of canvas
     };
-    treeModel.img.src = treeImgSrc
+    treeModel.img.src = treeImgSrc;
 
     // Physics Setup 
     const physics = {
@@ -113,11 +121,11 @@ export const initializeGame = (canvas, gameData) => {
       if (enemyArray.length > 5) {  // clear enemy 
         enemyArray.shift();
       }
-    }, 1500);
+    }, 1200);
   
     // เพิ่มความเร็วของ Enemy ขึ้น 0.5 ทุกๆ 1 วิ
     speedInterval = setInterval(() => {
-      if (!gameover) {
+      if (!gameover && treeModel.speed >= -20) {
         treeModel.speed -= 0.5;
       }
     }, 1000);
@@ -130,10 +138,17 @@ export const initializeGame = (canvas, gameData) => {
           physics.velocityY = -10;
         } else if (e.code === "KeyS" && player.y < player.baseY) {
           physics.velocityY = 30;
-        } else if (e.code === "KeyQ" && gameData.value.playerSkills.shotgunSkill > 0) { // add more condition Eg. if there is no skill left cant use this (go buy more in shop)
+        } else if (e.code === "KeyQ" && gameData.value.playerSkills.shotgunSkill > 0 && gameData.value.playerSkills.mugen.active <= 0) { 
           enemyArray.splice(0, enemyArray.length);
           gameData.value.playerSkills.shotgunSkill -= 1;
-        } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0  && gameData.value.playerSkills.mugen.cooldown <= 0) { // add more condition Eg. if in cooldown state cant use this
+
+          // change player img skin
+          player.img = shotgun;
+          setTimeout(()=> {
+            player.img = defaultImg;
+          }, 500)
+
+        } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0  && gameData.value.playerSkills.mugen.cooldown <= 0) { 
           // Show countdown for active skill
           gameData.value.playerSkills.mugen.active = 5
           const clearInt1 = setInterval(()=>{
