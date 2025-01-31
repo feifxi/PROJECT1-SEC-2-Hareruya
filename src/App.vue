@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import playerImgSrc from "./assets/image/placeholder.png";
+import playerImgSrc from "./assets/image/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist

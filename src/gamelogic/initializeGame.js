@@ -1,6 +1,7 @@
 import { onEnemieCollision, onScoreCollision } from "./collision";
 import treeImgSrc from "../assets/image/tree.png";
 import shotgunImgSrc from "../assets/image/shotgun.png";
+import mugenImgSrc from "../assets/image/mugen.png";
 
 export const initializeGame = (canvas, gameData) => {
     // Canvas Setup
@@ -13,21 +14,26 @@ export const initializeGame = (canvas, gameData) => {
 
     // Player Model Setup 
     // Img
-    const defaultImg = new Image()
+    const defaultImg = new Image();
+    const shotgun = new Image();
+    const mugen = new Image();
     defaultImg.src = gameData.value.skin.equipped;
-
-    const shotgun = new Image()
-    shotgun.src = shotgunImgSrc
+    shotgun.src = shotgunImgSrc;
+    mugen.src = mugenImgSrc;
+  
+    // Default Width, Height & y position
+    const defaultWidth = 62;
+    const defaultHeight = 76;
+    const defaultY = boardH - 76;
 
     const player = {
-      w: 62,
-      h: 76,
+      w: defaultWidth,
+      h: defaultHeight,
       x: 50,
-      y: boardH - 76,  // start at the ground
-      baseY: boardH - 76, // ground postion of player (board height - player height)
+      y: defaultY,  // start at the ground
+      baseY: defaultY, // ground postion of player (board height - player height)
       img: defaultImg,
     };
-    
 
     // Enemy Model Setup
     const treeModel = {
@@ -43,7 +49,7 @@ export const initializeGame = (canvas, gameData) => {
     // Physics Setup 
     const physics = {
       velocityY: 0,   // ความแรงในการกระโดด
-      gravity: 0.23,
+      gravity: 0.23
     }
 
     const enemyArray = [];  // contain all the enemy in the map
@@ -54,7 +60,6 @@ export const initializeGame = (canvas, gameData) => {
     let animationFrameId; // Track animation frame
     let enemyInterval;
     let speedInterval;
-
   
     // Animation Handler
     const updateAnimation = () => {
@@ -69,8 +74,7 @@ export const initializeGame = (canvas, gameData) => {
         context.fillText('x2', boardW / 2 - 90 , 30);
         context.fillStyle = 'black'
         context.fillText('score : ' + score, boardW / 2 - 60 , 30);
-      }
-      else {
+      } else {
         context.fillText('score : ' + score, boardW / 2 - 50 , 30);
       }
 
@@ -93,18 +97,17 @@ export const initializeGame = (canvas, gameData) => {
           context.textAlign = "center";
           context.fillText("Game Over!", boardW / 2, boardH / 2);
           cancelAnimationFrame(animationFrameId);
-        // Set new Highscore
+
+          // Set new Highscore
           if (gameData.value.highScore < score) {
             context.fillStyle = 'red'
             context.fillText("You Achive New High Score!", boardW / 2, boardH / 2 - 30);
             gameData.value.highScore = score;   
           }
-        }
-        else if (onScoreCollision(player, tree)) {
+        } else if (onScoreCollision(player, tree)) {
             if (gameData.value.playerSkills.extraScore) {
-                score += 2
-            }
-            else {
+              score += 2;
+            } else {
                 score++;
             }
         }
@@ -138,36 +141,48 @@ export const initializeGame = (canvas, gameData) => {
           physics.velocityY = -10;
         } else if (e.code === "KeyS" && player.y < player.baseY) {
           physics.velocityY = 30;
-        } else if (e.code === "KeyQ" && gameData.value.playerSkills.shotgunSkill > 0 && gameData.value.playerSkills.mugen.active <= 0) { 
+        } else if (e.code === "KeyQ" && gameData.value.playerSkills.shotgunSkill > 0 && gameData.value.playerSkills.mugen.active <= 0) {
           enemyArray.splice(0, enemyArray.length);
           gameData.value.playerSkills.shotgunSkill -= 1;
 
           // change player img skin
           player.img = shotgun;
-          setTimeout(()=> {
+          player.w = 107;
+          setTimeout(() => {
             player.img = defaultImg;
-          }, 500)
-
-        } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0  && gameData.value.playerSkills.mugen.cooldown <= 0) { 
+            player.w = defaultWidth;
+          }, 500);
+        } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0 && gameData.value.playerSkills.mugen.cooldown <= 0) {
+          player.img = mugen;
+          player.w = 108;
+          player.h = 107;
+          player.y = defaultY - 31;
+          player.baseY = defaultY - 31;
           // Show countdown for active skill
           gameData.value.playerSkills.mugen.active = 5
-          const clearInt1 = setInterval(()=>{
-            --gameData.value.playerSkills.mugen.active
+          const clearInt1 = setInterval(() => {
+            --gameData.value.playerSkills.mugen.active;
             if (gameData.value.playerSkills.mugen.active <= 0) {
-                clearInterval(clearInt1)
+              clearInterval(clearInt1);
+              player.img = defaultImg;
+              player.w = defaultWidth;
+              player.h = defaultHeight;
+              player.y = defaultY;
+              player.baseY = defaultY;
             }
-          }, 1000)
+          }, 1000);
+
           // Set Cooldown after deactive skill
-          setTimeout(()=>{
-            gameData.value.playerSkills.mugen.active = 0
-            gameData.value.playerSkills.mugen.cooldown = 15
+          setTimeout(() => {
+            gameData.value.playerSkills.mugen.active = 0;
+            gameData.value.playerSkills.mugen.cooldown = 15;
             const clearInt2 = setInterval(() => {
-                --gameData.value.playerSkills.mugen.cooldown
-                if (gameData.value.playerSkills.mugen.cooldown <= 0) {
-                    clearInterval(clearInt2)
-                }
-            }, 1000)
-          }, 5000)
+              --gameData.value.playerSkills.mugen.cooldown;
+              if (gameData.value.playerSkills.mugen.cooldown <= 0) {
+                clearInterval(clearInt2);
+              }
+            }, 1000);
+          }, 5000);
         }
     };
     
