@@ -48,15 +48,7 @@ export const initializeGame = (canvas, gameData) => {
   treeModel.img.src = treeImgSrc;
 
   // Airenemy Model Setup
-  const AirModel = {
-    w: 70,
-    h: 105,
-    x: 920,
-    y: boardH - 105,
-    img: new Image(),
-    speed: -3, // speed to the left side of canvas
-  };
-  treeModel.img.src = treeImgSrc;
+  
 
   // Physics Setup
   const physics = {
@@ -185,7 +177,7 @@ export const initializeGame = (canvas, gameData) => {
       // Play sound effect
       const sound = new Audio(shotgunSound)
       sound.play()
-      
+
     } else if (
       e.code === "KeyE" &&
       gameData.value.playerSkills.mugen.active <= 0 &&
