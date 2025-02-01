@@ -28,8 +28,8 @@ No? You want to be _Jesus_?\
 **INTRODUCING $${\color{lightblue}MUGEN}$$**\
 Upon activate this skill, you can become **GOJO** and phase through any obstacles in you way!
 **NO INJURY, BABY!**
-$${\color{red}Disclaimer:\ Hareluya\ team\ is\ not\ responsible\ for\ any\ pain\ and/or\ damage\ you\ did\ to\ youself.\ This\ is\ merely\ for\ entertainment,}\$$
-$${\color{red}please\ be\ advised\ and\ stay\ safe.}$$
+$${\color{red}Disclaimer:\ Hareluya\ team\ is\ not\ responsible\ for\ any\ pain\ and/or\ damage\ you\ did\ to\ youself.}\$$
+$${\color{red}This\ is\ merely\ for\ entertainment,\ please\ be\ advised\ and\ stay\ safe.}$$
 
 ## Responsibility
 - Main Game Logic using Canvas -> (66071-Pakin, 66100-Nitikorn, 66114-Noppawut, 66125-Suchai)
