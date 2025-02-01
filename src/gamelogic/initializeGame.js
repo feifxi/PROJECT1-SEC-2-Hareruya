@@ -104,6 +104,9 @@ export const initializeGame = (canvas, gameData) => {
             context.fillText("You Achive New High Score!", boardW / 2, boardH / 2 - 30);
             gameData.value.highScore = score;   
           }
+
+          // convert score to money
+
         } else if (onScoreCollision(player, tree)) {
             if (gameData.value.playerSkills.extraScore) {
               score += 2;
@@ -167,7 +170,6 @@ export const initializeGame = (canvas, gameData) => {
               player.img = defaultImg;
               player.w = defaultWidth;
               player.h = defaultHeight;
-              player.y = defaultY;
               player.baseY = defaultY;
             }
           }, 1000);

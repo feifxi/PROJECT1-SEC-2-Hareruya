@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import playerImgSrc from "./assets/image/player-default.png";
+import playerImgSrc2 from "./assets/image/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
@@ -155,30 +156,35 @@ const handleShotgunSkill = () => {
 // Skin Shop
 const SkinData = [
   {
-    id: 1,
-    img: "To1.jpg",
-    name: "Gojo",
-    word: "The strongest soccerer in the world who got cut to half by four arm",
+    name: "Askaban",    
+    img: playerImgSrc2,
+    price: 500,
   },
   {
-    id: 2,
-    img: "To1.jpg",
+    name: "Kuy1",
+    img: playerImgSrc2,
+    price: 200,
+  },
+  {
+    name: "Kuy2",
+    img: playerImgSrc2,
+    price: 100,
+  },
+  {
     name: "Jesus",
-    word: "The coolest, rarest, and most expensive skin in this game comes with spectacular effects. J E S U S",
-  },
-  {
-    id: 3,
-    img: "To1.jpg",
-    name: "Yorch",
-    word: "One of our developer team he can jump higher than normal by 1%",
-  },
-  {
-    id: 4,
-    img: "To1.jpg",
-    name: "Muhaha",
-    word: "Muhaha Muhahaaa Muhaha Muhahaa Muh... it Just a frog",
+    img: playerImgSrc2,
+    price: 0,
+    limited: true,
   },
 ];
+
+
+const buySkin = (skin) => {
+  const { name:skinName , price, img } = skin
+  
+  console.log(skin)
+}
+
 </script>
 
 <template>
@@ -343,41 +349,22 @@ const SkinData = [
               <div class="card-body">
                 <div class="flex justify-between items-center">
                   <h2 class="card-title">{{ data.name }}</h2>
-                  <button class="btn btn-primary">Buy Now</button>
+                  <h2 class="" v-if="!data.limited">{{ data.price }}</h2>
+                  <h2 class="" v-if="data.limited">{{ 'Limited!!' }}</h2>
+                  <button class="btn btn-primary" v-on:click="buySkin(data)">Buy Now</button>
                 </div>
                 <p> {{ data.word }} </p>
               </div>
               <figure>
                 <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  v-bind:src="data.img"
                   alt="Shoes"
-                  class=" object-cover"
+                  class="object-cover"
                 />
               </figure>
             </div>
           </div>
         </div>
-
-          <!-- 
-          <div class="flex flex-row p-10 w-full justify-center">
-            <div class="border-2 border-black mx-4 p-5 pb-0" v-for="data in SkinData" :key="data.id">
-              <div class=" flex flex-col items-center py-6 h-full">
-                <div class="flex flex-col items-center">
-                  <img 
-                    :src="`/src/assets/image/${data.img}`" 
-                    class="rounded-full w-35 h-35"
-                  >
-                  <p class="pt-5"> {{ data.name }}</p>
-                </div>
-                <div class="flex flex-col justify-between h-full items-center ">
-                  <p class="text-center"> {{ data.word }}</p>
-                  <button class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50 border-blue-600 border-1 ">
-                    Buy
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div> -->
         
 
         <!-- add more... -->
