@@ -2,6 +2,7 @@ import { onEnemieCollision, onScoreCollision } from "./collision";
 import treeImgSrc from "../assets/image/tree.png";
 import shotgunImgSrc from "../assets/image/shotgun.png";
 import mugenImgSrc from "../assets/image/mugen.png";
+import shotgunSound from '../assets/sounds/shotgun.mp4'
 
 export const initializeGame = (canvas, gameData) => {
     // Canvas Setup
@@ -155,6 +156,10 @@ export const initializeGame = (canvas, gameData) => {
             player.img = defaultImg;
             player.w = defaultWidth;
           }, 500);
+
+          // Play sound effect
+          const sound = new Audio(shotgunSound)
+          sound.play()
         } else if (e.code === "KeyE" && gameData.value.playerSkills.mugen.active <= 0 && gameData.value.playerSkills.mugen.cooldown <= 0) {
           player.img = mugen;
           player.w = 108;
