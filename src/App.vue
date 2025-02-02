@@ -63,13 +63,13 @@ const handleBackHome = () => {
 const handleOpenShop = () => {
   page.value = "shop";
   endGame();
-  luckyDrawResult.value
+  luckyDrawResult.value;
 };
 
 const handleCloseShop = () => {
   page.value = "game";
   startGame();
-  luckyDrawResult.value = 'random'
+  luckyDrawResult.value = "random";
 };
 
 const handleOpenTutorial = () => {
@@ -118,10 +118,10 @@ const TutorialData = [
 // Lucky draw
 const luckyDrawResult = ref("random");
 const luckyDrawItems = [
-  { name: "Jesus", percentage: 2 },
-  { name: "Shotgun", percentage: 18 },
+  { name: "Jesus", percentage: 5 },
+  { name: "Shotgun", percentage: 25 },
   { name: "ExtraScore", percentage: 30 },
-  { name: "Salt Muhaha", percentage: 50 },
+  { name: "Salt Muhaha", percentage: 40 },
 ];
 const random = () => {
   const randomNumber = Math.random() * 100;
@@ -140,6 +140,30 @@ const random = () => {
         clearInterval(clearInt);
         luckyDrawResult.value = item.name; // display the result item
       }, 3000); // 3 sec
+
+      if (item.name === "Jesus") {
+        setTimeout(() => {
+          if (!gameData.value.skin.owned.includes("Jesus")) {
+            gameData.value.skin.owned.push("Jesus"); // add skin Jesus
+          }
+        }, 3050);
+      } else if (item.name === "Shotgun") {
+        setTimeout(() => {
+          if (gameData.value.playerSkills.shotgunSkill < 3) {
+            handleShotgunSkill();
+          } else {
+            gameData.value.money += 40;
+          }
+        }, 3050); // add Shotgun bullet
+      } else if (item.name === "ExtraScore") {
+        setTimeout(() => {
+          gameData.value.playerSkills.extraScore = true; // ExtraScore on
+        }, 3050);
+      } else if (item.name === "Salt Muhaha") {
+        setTimeout(() => {
+          gameData.value.money += 50;
+        }, 3050);
+      }
       return;
     }
   }
@@ -156,19 +180,19 @@ const handleShotgunSkill = () => {
 // Skin Shop
 const SkinData = [
   {
-    name: "Askaban",    
+    name: "Askaban",
     img: playerImgSrc2,
     price: 500,
   },
   {
-    name: "Kuy1",
+    name: "gojo",
     img: playerImgSrc2,
-    price: 200,
+    price: 1000,
   },
   {
-    name: "Kuy2",
+    name: "Sung Jintoo",
     img: playerImgSrc2,
-    price: 100,
+    price: 50,
   },
   {
     name: "Jesus",
@@ -178,46 +202,47 @@ const SkinData = [
   },
 ];
 
+//Manage purchase status
+const handleSkin = (skin) => {
+  return gameData.value.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
+};
 
+//Buy Skin
 const buySkin = (skin) => {
-  const { name:skinName , price, img } = skin
-  
-  console.log(skin)
-}
-
+  const { name: skinName, price, img } = skin;
+  if (skin.price <= gameData.value.money) {
+    gameData.value.skin.owned.push(skinName);
+    gameData.value.money -= price;
+  }
+};
 </script>
 
 <template>
   <!-- Home Page -->
   <section
     v-if="page === 'home'"
-    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
-    >
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
         :style="{
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
-        }"
-      >
+        }">
         Become Jesus
       </h1>
       <button
         class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold rounded active:bg-black/40 ring-2 ring-white-300 rounded-full"
         :style="{ WebkitTextStroke: '0.35px blue' }"
-        @click="handleStartGame"
-      >
+        @click="handleStartGame">
         Start
       </button>
 
       <button
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-10 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTutorial"
-      >
+        @click="handleOpenTutorial">
         ?
       </button>
     </div>
@@ -226,36 +251,29 @@ const buySkin = (skin) => {
   <!-- Tutorial Page -->
   <section
     v-else-if="page === 'tutorial'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
       class="container flex h-full my-auto items-center justify-center"
-      id="container"
-    >
+      id="container">
       <div class="" id="slide-wrapper">
         <ul
           class="max-w-150 scrollbar-hidden h-200 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
           id="slide-list"
-          ref="scrollslide"
-        >
+          ref="scrollslide">
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover"
             id="slide-item1"
             v-for="data in TutorialData"
-            :key="data.id"
-          >
+            :key="data.id">
             <div
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col min-h-175"
-              id="slide-link"
-            >
+              id="slide-link">
               <img
                 :src="`/src/assets/image/${data.img}`"
                 class="w-full rounded-lg aspect-video object-cover mb-3"
-                id="slide-image"
-              />
+                id="slide-image" />
               <p
-                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs"
-              >
+                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
                 {{ data.p1 }}
               </p>
               <h2 class="text-lg text-black font-semibold" id="slide-title">
@@ -265,22 +283,19 @@ const buySkin = (skin) => {
                 <div class="my-3 flex flex-row justify-around">
                   <button
                     v-on:click="goleft"
-                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                  >
+                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                     <
                   </button>
                   <button
                     v-on:click="goright"
-                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                  >
+                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                     >
                   </button>
                 </div>
                 <div class="justify-center align-center flex flex-row">
                   <button
                     @click="handleCloseTutorial"
-                    class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                  >
+                    class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                     back
                   </button>
                 </div>
@@ -295,15 +310,16 @@ const buySkin = (skin) => {
   <!-- Shop Page -->
   <section
     v-else-if="page === 'shop'"
-    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll "
-  >
+    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll">
     <div class="w-[95%] p-5 bg-base-100 rounded-xl">
       <div class="flex justify-between pb-5">
         <h1 class="text-5xl font-bold">Shop</h1>
+        <h1 class="text-blue-500 text-3xl font-bold">
+          Money: {{ gameData.money }}$
+        </h1>
         <button
           class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
-          @click="handleCloseShop"
-        >
+          @click="handleCloseShop">
           Close
         </button>
       </div>
@@ -315,12 +331,14 @@ const buySkin = (skin) => {
             <div class="border p-5 text-center">
               {{ luckyDrawResult }}
             </div>
-            <button
-              class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3"
-              @click="random"
-            >
-              Spin
-            </button>
+            <div class="flex-col justify-items-center">
+              <button
+                class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3"
+                @click="random">
+                Spin
+              </button>
+              <p>150$ = 1 spin</p>
+            </div>
           </div>
 
           <!-- Items shop -->
@@ -330,8 +348,7 @@ const buySkin = (skin) => {
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <button
               class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-              @click="handleShotgunSkill"
-            >
+              @click="handleShotgunSkill">
               Buy
             </button>
           </div>
@@ -343,29 +360,29 @@ const buySkin = (skin) => {
           <!-- skin list -->
           <div class="flex items-center justify-start gap-5">
             <div
-              v-for="data in SkinData" :key="data.id"
-              class="card bg-base-300 shadow-sm"
-            >
+              v-for="data in SkinData"
+              :key="data.id"
+              class="card bg-base-300 shadow-sm">
               <div class="card-body">
                 <div class="flex justify-between items-center">
                   <h2 class="card-title">{{ data.name }}</h2>
                   <h2 class="" v-if="!data.limited">{{ data.price }}</h2>
-                  <h2 class="" v-if="data.limited">{{ 'Limited!!' }}</h2>
-                  <button class="btn btn-primary" v-on:click="buySkin(data)">Buy Now</button>
+                  <h2 class="" v-if="data.limited">{{ "Limited!!" }}</h2>
+                  <button
+                    class="btn btn-primary"
+                    :disabled="handleSkin(data) === 'Owned'"
+                    v-on:click="buySkin(data)">
+                    {{ handleSkin(data) }}
+                  </button>
                 </div>
-                <p> {{ data.word }} </p>
+                <p>{{ data.word }}</p>
               </div>
               <figure>
-                <img
-                  v-bind:src="data.img"
-                  alt="Shoes"
-                  class="object-cover"
-                />
+                <img v-bind:src="data.img" alt="Shoes" class="object-cover" />
               </figure>
             </div>
           </div>
         </div>
-        
 
         <!-- add more... -->
       </div>
@@ -378,24 +395,24 @@ const buySkin = (skin) => {
       <div class="flex gap-5 py-5">
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleBackHome"
-        >
+          @click="handleBackHome">
           Back to home
         </button>
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleOpenShop"
-        >
+          @click="handleOpenShop">
           Shop
         </button>
-        <h1 class="text-3xl ml-auto">High Score: {{ gameData.highScore }}</h1>
+        <div class="flex-col ml-auto">
+          <h1 class="text-3xl">High Score: {{ gameData.highScore }}</h1>
+          <h1 class="text-3xl">Money: {{ gameData.money }}$</h1>
+        </div>
       </div>
 
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
-        ></canvas>
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"></canvas>
 
         <div class="absolute top-5 left-5 flex gap-3">
           <div
@@ -404,8 +421,7 @@ const buySkin = (skin) => {
               gameData.playerSkills.shotgunSkill > 0
                 ? 'bg-orange-500'
                 : 'bg-gray-500'
-            "
-          >
+            ">
             {{ gameData.playerSkills.shotgunSkill }}
           </div>
           <div
@@ -416,8 +432,7 @@ const buySkin = (skin) => {
                 : gameData.playerSkills.mugen.cooldown
                 ? 'bg-gray-500'
                 : 'bg-orange-500'
-            "
-          >
+            ">
             {{
               gameData.playerSkills.mugen.active > 0
                 ? gameData.playerSkills.mugen.active
