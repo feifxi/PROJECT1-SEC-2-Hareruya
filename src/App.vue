@@ -4,6 +4,7 @@ import playerImgSrc from "./assets/image/player-default.png";
 import playerImgSrc2 from "./assets/image/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
+
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
 const gameData = ref(
@@ -32,6 +33,8 @@ gameData.value.playerSkills.mugen = {
 // window.addEventListener("beforeunload", (e) => {
 //   localStorage.setItem("gameData", JSON.stringify(gameData.value));
 // });
+
+
 
 const page = ref("home");
 const canvas = ref(null); // reference t canvas element
@@ -72,10 +75,14 @@ const handleCloseShop = () => {
   luckyDrawResult.value = "random";
 };
 
+const handleOpenTheme = () => {
+  page.value = "theme";
+};
+
 const handleOpenTutorial = () => {
   page.value = "tutorial";
 };
-const handleCloseTutorial = () => {
+const handleClosePage = () => {
   page.value = "home";
 };
 
@@ -172,7 +179,8 @@ const random = () => {
 // Items Shop
 // - shot gun
 const handleShotgunSkill = () => {
-  if (gameData.value.playerSkills.shotgunSkill < 3) {
+  if (gameData.value.playerSkills.shotgunSkill < 3 && gameData.value.money >= 75)  {
+    gameData.value.money -= 75
     gameData.value.playerSkills.shotgunSkill++;
   }
 };
@@ -215,6 +223,15 @@ const buySkin = (skin) => {
     gameData.value.money -= price;
   }
 };
+
+//Background canvas
+const changeBg = ref("")
+const li = 'flex flex-col items-center w-105 h-auto '
+const butt = "h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer  bg-black mt-4"
+const changeCanvasBackground = (image) => {
+changeBg.value = image
+console.log('hello')
+}
 </script>
 
 <template>
@@ -234,7 +251,7 @@ const buySkin = (skin) => {
         Become Jesus
       </h1>
       <button
-        class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold rounded active:bg-black/40 ring-2 ring-white-300 rounded-full"
+        class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold  active:bg-black/40 ring-2 ring-white-300 rounded-full"
         :style="{ WebkitTextStroke: '0.35px blue' }"
         @click="handleStartGame">
         Start
@@ -244,6 +261,12 @@ const buySkin = (skin) => {
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-10 h-10 text-center ring-2 ring-white-300"
         @click="handleOpenTutorial">
         ?
+      </button>
+
+      <button
+        class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-15 h-10 text-center ring-2 ring-white-300"
+        @click="handleOpenTheme">
+        theme
       </button>
     </div>
   </section>
@@ -255,18 +278,18 @@ const buySkin = (skin) => {
     <div
       class="container flex h-full my-auto items-center justify-center"
       id="container">
-      <div class="" id="slide-wrapper">
+      <div  id="slide-wrapper">
         <ul
-          class="max-w-150 scrollbar-hidden h-200 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
+          class="max-w-150 no-scrollbar h-180 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
           id="slide-list"
           ref="scrollslide">
           <li
-            class="list-style-none group min-w-150 my-auto snap-start object-cover"
+            class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
             v-for="data in TutorialData"
-            :key="data.id">
+            :key="index">
             <div
-              class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 flex flex-col min-h-175"
+              class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
               id="slide-link">
               <img
                 :src="`/src/assets/image/${data.img}`"
@@ -276,7 +299,8 @@ const buySkin = (skin) => {
                 class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
                 {{ data.p1 }}
               </p>
-              <h2 class="text-lg text-black font-semibold" id="slide-title">
+              <div class="flex flex-col justify-between h-full">
+                <h2 class="text-lg text-black font-semibold" id="slide-title">
                 {{ data.p2 }}
               </h2>
               <div class="flex flex-col">
@@ -294,18 +318,52 @@ const buySkin = (skin) => {
                 </div>
                 <div class="justify-center align-center flex flex-row">
                   <button
-                    @click="handleCloseTutorial"
+                    @click="handleClosePage"
                     class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                     back
                   </button>
                 </div>
               </div>
             </div>
+              
+            </div>
           </li>
         </ul>
       </div>
     </div>
   </section>
+
+   <!-- Theme Page -->
+    <section v-else-if="page === 'theme'"
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+<div class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center">
+  <button
+                    @click="handleClosePage"
+                    class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer   bg-black">
+                    back
+  </button>
+  <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
+    <li :class="li">
+      <img src="./assets/image/canvas-bg1.gif" >
+      <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">Use</button>
+    </li>
+    <li :class="li">
+      <img src="./assets/image/canvas-bg1.gif" >
+      <button @click="changeCanvasBackground('canvas-bg1.gif')" :class="butt">Use</button>
+    </li>
+    <li :class="li">
+      <img src="./assets/image/canvas-bg1.gif" >
+      <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">Use</button>
+    </li>
+    <li :class="li">
+      <img src="./assets/image/canvas-bg1.gif" >
+      <button @click="changeCanvasBackground('canvas-bg1.gif')" :class="butt">Use</button>
+    </li>
+    
+    
+  </ul>
+</div>
+    </section>
 
   <!-- Shop Page -->
   <section
@@ -408,11 +466,11 @@ const buySkin = (skin) => {
           <h1 class="text-3xl">Money: {{ gameData.money }}$</h1>
         </div>
       </div>
-
+      
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"></canvas>
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto " :class="`bg-[url(src/assets/image/`+ changeBg +`)]`"></canvas>
 
         <div class="absolute top-5 left-5 flex gap-3">
           <div
@@ -447,12 +505,23 @@ const buySkin = (skin) => {
       <div class="">
         <h2 class="text-3xl py-5 text-center">Press "Space" to restart</h2>
       </div>
+      <div class="p-10 flex justify-center items-center w-full ">
+    <div class="w-100 group flex flex-row items-center">
+      <div class=" p-4 text-white    cursor-pointer hover:opacity-0 w-100 ">
+        <p class="rounded-full border-1 w-8 h-8 content-center text-center">?</p>
+      </div>
+      <div class="flex flex-col left-0 mt-2 w-100  text-white p-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 ">
+        W : jump <br>
+        S : down <br>
+        Q : shotgun <br>
+        E : Mugen
+      </div>
+    </div>
+  </div>
     </div>
   </section>
 </template>
 
-<style scoped>
-.scrollbar-hidden::-webkit-scrollbar {
-  display: none;
-}
+<style>
+
 </style>
