@@ -1,6 +1,7 @@
-
 import { onEnemieCollision, onScoreCollision } from "./collision";
-import treeImgSrc from "../assets/image/tree.png";
+import facebookEnemyImgSrc from "../assets/image/facebook-enemy.png";
+import robloxEnemyImgSrc from "../assets/image/roblox-enemy.png";
+import tiktokEnemyImgSrc from "../assets/image/tiktok-enemy.png";
 import shotgunImgSrc from "../assets/image/shotgun.png";
 import mugenImgSrc from "../assets/image/mugen.png";
 import shotgunSound from '../assets/sounds/shotgun.mp4'
@@ -16,10 +17,10 @@ export const initializeGame = (canvas, gameData) => {
 
   // Player Model Setup
   // Img
-  const defaultImg = new Image();
+  const defaultPlayerImg = new Image();
   const shotgun = new Image();
   const mugen = new Image();
-  defaultImg.src = gameData.value.skin.equipped;
+  defaultPlayerImg.src = gameData.value.skin.equipped;
   shotgun.src = shotgunImgSrc;
   mugen.src = mugenImgSrc;
 
@@ -34,11 +35,11 @@ export const initializeGame = (canvas, gameData) => {
     x: 50,
     y: defaultY, // start at the ground
     baseY: defaultY, // ground postion of player (board height - player height)
-    img: defaultImg,
+    img: defaultPlayerImg,
   };
 
   // Enemy Model Setup
-  const treeModel = {
+  const groundEnemyModel = {
     w: 70,
     h: 105,
     x: 920,
@@ -46,7 +47,7 @@ export const initializeGame = (canvas, gameData) => {
     img: new Image(),
     speed: -3, // speed to the left side of canvas
   };
-  treeModel.img.src = treeImgSrc;
+  groundEnemyModel.img.src = facebookEnemyImgSrc;
 
   // Airenemy Model Setup
   
@@ -136,7 +137,7 @@ export const initializeGame = (canvas, gameData) => {
   enemyInterval = setInterval(() => {
     if (gameover) return;
 
-    const treeEnemy = Object.create(treeModel);
+    const treeEnemy = Object.create(groundEnemyModel);
     enemyArray.push(treeEnemy);
 
     if (enemyArray.length > 5) {
@@ -147,8 +148,8 @@ export const initializeGame = (canvas, gameData) => {
 
   // เพิ่มความเร็วของ Enemy ขึ้น 0.5 ทุกๆ 1 วิ
   speedInterval = setInterval(() => {
-    if (!gameover && treeModel.speed >= -20) {
-      treeModel.speed -= 0.5;
+    if (!gameover && groundEnemyModel.speed >= -20) {
+      groundEnemyModel.speed -= 0.5;
     }
   }, 1000);
 
@@ -171,7 +172,7 @@ export const initializeGame = (canvas, gameData) => {
       player.img = shotgun;
       player.w = 107;
       setTimeout(() => {
-        player.img = defaultImg;
+        player.img = defaultPlayerImg;
         player.w = defaultWidth;
       }, 500);
 
@@ -189,13 +190,14 @@ export const initializeGame = (canvas, gameData) => {
       player.h = 107;
       player.y = defaultY - 31;
       player.baseY = defaultY - 31;
+
       // Show countdown for active skill
       gameData.value.playerSkills.mugen.active = 5;
       const clearInt1 = setInterval(() => {
         --gameData.value.playerSkills.mugen.active;
         if (gameData.value.playerSkills.mugen.active <= 0) {
           clearInterval(clearInt1);
-          player.img = defaultImg;
+          player.img = defaultPlayerImg;
           player.w = defaultWidth;
           player.h = defaultHeight;
           player.baseY = defaultY;
