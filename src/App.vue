@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import playerImgSrc from "./assets/image/player-default.png";
-import playerImgSrc2 from "./assets/image/player-default.png";
+import playerImgSrc from "./assets/image/sprites/player-default.png";
+import playerImgSrc2 from "./assets/image/sprites/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
-
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -128,6 +127,7 @@ const luckyDrawItems = [
   { name: "ExtraScore", percentage: 30 },
   { name: "Salt Muhaha", percentage: 40 },
 ];
+
 const random = () => {
   const randomNumber = Math.random() * 100;
   let cumulative = 0;
@@ -174,8 +174,8 @@ const random = () => {
   }
 };
 
-// Items Shop
-// - shot gun
+// Item Shop
+// Shotgun
 const handleShotgunSkill = () => {
   if (
     gameData.value.playerSkills.shotgunSkill < 3 &&
@@ -227,32 +227,32 @@ const buySkin = (skin) => {
 
 //Background canvas
 const changeBg = ref("");
-const li = "flex flex-col items-center w-105 h-auto ";
+const li = "flex flex-col items-center w-105 h-auto";
 const clickcheck = (index) =>{
-  if(index === 1) {
-    changeBg.value = 'Home-bg.gif'
-    document.getElementById('toggle-1').checked = true
-    document.getElementById('toggle-2').checked = false
-    document.getElementById('toggle-3').checked = false
-    document.getElementById('toggle-4').checked = false
-  }else if(index === 2) {
-    changeBg.value = 'canvas-bg1.gif'
-    document.getElementById('toggle-1').checked = false
-    document.getElementById('toggle-2').checked = true
-    document.getElementById('toggle-3').checked = false
-    document.getElementById('toggle-4').checked = false
-  }else if(index === 3) {
-    changeBg.value = 'Home-bg.gif'
-    document.getElementById('toggle-1').checked = false
-    document.getElementById('toggle-2').checked = false
-    document.getElementById('toggle-3').checked = true
-    document.getElementById('toggle-4').checked = false
-  }else if(index === 4) {
-    changeBg.value = 'canvas-bg1.gif'
-    document.getElementById('toggle-1').checked = false
-    document.getElementById('toggle-2').checked = false
-    document.getElementById('toggle-3').checked = false
-    document.getElementById('toggle-4').checked = true
+  if (index === 1) {
+    changeBg.value = 'backgrounds/Home-bg.gif';
+    document.getElementById('toggle-1').checked = true;
+    document.getElementById('toggle-2').checked = false;
+    document.getElementById('toggle-3').checked = false;
+    document.getElementById('toggle-4').checked = false;
+  } else if (index === 2) {
+    changeBg.value = 'backgrounds/canvas-bg1.gif';
+    document.getElementById('toggle-1').checked = false;
+    document.getElementById('toggle-2').checked = true;
+    document.getElementById('toggle-3').checked = false;
+    document.getElementById('toggle-4').checked = false;
+  } else if (index === 3) {
+    changeBg.value = 'backgrounds/Home-bg.gif';
+    document.getElementById('toggle-1').checked = false;
+    document.getElementById('toggle-2').checked = false;
+    document.getElementById('toggle-3').checked = true;
+    document.getElementById('toggle-4').checked = false;
+  } else if (index === 4) {
+    changeBg.value = 'backgrounds/canvas-bg1.gif';
+    document.getElementById('toggle-1').checked = false;
+    document.getElementById('toggle-2').checked = false;
+    document.getElementById('toggle-3').checked = false;
+    document.getElementById('toggle-4').checked = true;
   }
 }
 </script>
@@ -264,7 +264,7 @@ const clickcheck = (index) =>{
     class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
   >
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
     >
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
@@ -326,7 +326,7 @@ const clickcheck = (index) =>{
               id="slide-link"
             >
               <img
-                :src="`/src/assets/image/${data.img}`"
+                :src="`/src/assets/image/backgrounds/${data.img}`"
                 class="w-full rounded-lg aspect-video object-cover mb-3"
                 id="slide-image"
               />
@@ -383,24 +383,24 @@ const clickcheck = (index) =>{
         @click="handleClosePage"
         class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer bg-black"
       >
-        back
+        Back
       </button>
 
       <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <input type="checkbox" @click="clickcheck(1)" class="toggle bg-black mt-5" id="toggle-1" />
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <input type="checkbox" @click="clickcheck(2)" class="toggle bg-black mt-5 toggle-primary" id="toggle-2" />
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <input type="checkbox" @click="clickcheck(3)" class="toggle bg-black mt-5 toggle-secondary" id="toggle-3" />
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <input type="checkbox" @click="clickcheck(4)" class="toggle bg-black mt-5 toggle-accent" id="toggle-4" />
         </li>
       </ul>

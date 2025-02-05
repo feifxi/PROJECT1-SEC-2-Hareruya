@@ -1,10 +1,11 @@
 import { onEnemieCollision, onScoreCollision } from "./collision";
-import facebookEnemyImgSrc from "../assets/image/facebook-enemy.png";
-import robloxEnemyImgSrc from "../assets/image/roblox-enemy.png";
-import tiktokEnemyImgSrc from "../assets/image/tiktok-enemy.png";
-import jsEnemyImgSrc from "../assets/image/js-enemy.png";
-import shotgunImgSrc from "../assets/image/shotgun.png";
-import mugenImgSrc from "../assets/image/mugen.png";
+import facebookEnemyImgSrc from "../assets/image/sprites/facebook-enemy.png";
+import robloxEnemyImgSrc from "../assets/image/sprites/roblox-enemy.png";
+import tiktokEnemyImgSrc from "../assets/image/sprites/tiktok-enemy.png";
+import fivemEnemyImgSrc from "../assets/image/sprites/fivem-enemy.png";
+import instagramImgSrc from "../assets/image/sprites/instagram-enemy.png";
+import shotgunImgSrc from "../assets/image/sprites/shotgun.png";
+import mugenImgSrc from "../assets/image/sprites/mugen.png";
 import shotgunSound from '../assets/sounds/shotgun.mp4'
 
 export const initializeGame = (canvas, gameData) => {
@@ -43,19 +44,22 @@ export const initializeGame = (canvas, gameData) => {
   // Skin Img
   const tiktokEnemyImg = new Image();
   const facebookEnemyImg = new Image();
-  const jsEnemyImg = new Image();
+  const fivemEnemyImg = new Image();
   const robloxEnemyImg = new Image();
+  const instagramImg = new Image();
   tiktokEnemyImg.src = tiktokEnemyImgSrc;
   facebookEnemyImg.src = facebookEnemyImgSrc;
-  jsEnemyImg.src = jsEnemyImgSrc;
+  fivemEnemyImg.src = fivemEnemyImgSrc;
   robloxEnemyImg.src = robloxEnemyImgSrc;
+  instagramImg.src = instagramImgSrc;
 
   const enemySkins = [
     tiktokEnemyImg,
     facebookEnemyImg,
-    jsEnemyImg,
+    fivemEnemyImg,
     robloxEnemyImg,
-  ]
+    instagramImg
+  ];
 
   const enemyModel = {
     w: 70,
@@ -95,9 +99,9 @@ export const initializeGame = (canvas, gameData) => {
       context.fillStyle = "red";
       context.fillText("x2", boardW / 2 - 90, 30);
       context.fillStyle = "black";
-      context.fillText("score : " + score, boardW / 2 - 60, 30);
+      context.fillText("Score : " + score, boardW / 2 - 60, 30);
     } else {
-      context.fillText("score : " + score, boardW / 2 - 50, 30);
+      context.fillText("Score : " + score, boardW / 2 - 50, 30);
     }
 
     // Handle Player Movement
