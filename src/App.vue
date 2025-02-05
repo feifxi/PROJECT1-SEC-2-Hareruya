@@ -4,7 +4,6 @@ import playerImgSrc from "./assets/image/player-default.png";
 import playerImgSrc2 from "./assets/image/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
-
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
 const gameData = ref(
@@ -30,11 +29,9 @@ gameData.value.playerSkills.mugen = {
 };
 
 // Save Game Data before player exit
-// window.addEventListener("beforeunload", (e) => {
-//   localStorage.setItem("gameData", JSON.stringify(gameData.value));
-// });
-
-
+window.addEventListener("beforeunload", (e) => {
+  localStorage.setItem("gameData", JSON.stringify(gameData.value));
+});
 
 const page = ref("home");
 const canvas = ref(null); // reference t canvas element
@@ -506,18 +503,18 @@ console.log('hello')
         <h2 class="text-3xl py-5 text-center">Press "Space" to restart</h2>
       </div>
       <div class="p-10 flex justify-center items-center w-full ">
-    <div class="w-100 group flex flex-row items-center">
-      <div class=" p-4 text-white    cursor-pointer hover:opacity-0 w-100 ">
-        <p class="rounded-full border-1 w-8 h-8 content-center text-center">?</p>
+        <div class="w-100 group flex flex-row items-center">
+          <div class=" p-4 text-white    cursor-pointer hover:opacity-0 w-100 ">
+            <p class="rounded-full border-1 w-8 h-8 content-center text-center">?</p>
+          </div>
+          <div class="flex flex-col left-0 mt-2 w-100  text-white p-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 ">
+            W : jump <br>
+            S : down <br>
+            Q : shotgun <br>
+            E : Mugen
+          </div>
+        </div>
       </div>
-      <div class="flex flex-col left-0 mt-2 w-100  text-white p-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 ">
-        W : jump <br>
-        S : down <br>
-        Q : shotgun <br>
-        E : Mugen
-      </div>
-    </div>
-  </div>
     </div>
   </section>
 </template>
