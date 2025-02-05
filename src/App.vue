@@ -450,25 +450,34 @@ console.log('hello')
       <div class="flex gap-5 py-5">
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleBackHome">
+          @click="handleBackHome"
+        >
           Back to home
         </button>
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleOpenShop">
+          @click="handleOpenShop"
+        >
           Shop
         </button>
+        
         <div class="flex-col ml-auto">
-          <h1 class="text-3xl">High Score: {{ gameData.highScore }}</h1>
-          <h1 class="text-3xl">Money: {{ gameData.money }}$</h1>
+          <h1 class="text-3xl text-amber-200">
+            High Score: <span class="text-white">{{ gameData.highScore }}</span>
+          </h1>
+          <h1 class="text-3xl text-green-400"> 
+            Money: <span class="text-white">{{ gameData.money }}$</span>
+          </h1>
         </div>
       </div>
-      
+      <!-- Canvas Section  -->
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto " :class="`bg-[url(src/assets/image/`+ changeBg +`)]`"></canvas>
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto " :class="`bg-[url(src/assets/image/`+ changeBg +`)]`">
+        </canvas>
 
+        <!-- Skill Status -->
         <div class="absolute top-5 left-5 flex gap-3">
           <div
             class="rounded-full text-white size-15 flex items-center justify-center"
@@ -497,24 +506,26 @@ console.log('hello')
             }}
           </div>
         </div>
+        
+        <!-- Tooltip   -->
+        <div class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500 ">
+          <div class="group-hover:hidden flex justify-center items-center border-black border-2 size-8 rounded-full">
+            ?
+          </div>
+          <div class="hidden group-hover:flex flex-col border border-black rounded p-5 bg-white">
+            <p>W : jump</p>
+            <p>S : down</p>
+            <p>Q : shotgun</p>
+            <p>E : Mugen</p>
+          </div>
+        </div>
+      
       </div>
 
       <div class="">
         <h2 class="text-3xl py-5 text-center">Press "Space" to restart</h2>
       </div>
-      <div class="p-10 flex justify-center items-center w-full ">
-        <div class="w-100 group flex flex-row items-center">
-          <div class=" p-4 text-white    cursor-pointer hover:opacity-0 w-100 ">
-            <p class="rounded-full border-1 w-8 h-8 content-center text-center">?</p>
-          </div>
-          <div class="flex flex-col left-0 mt-2 w-100  text-white p-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 ">
-            W : jump <br>
-            S : down <br>
-            Q : shotgun <br>
-            E : Mugen
-          </div>
-        </div>
-      </div>
+
     </div>
   </section>
 </template>
