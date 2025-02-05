@@ -176,8 +176,11 @@ const random = () => {
 // Items Shop
 // - shot gun
 const handleShotgunSkill = () => {
-  if (gameData.value.playerSkills.shotgunSkill < 3 && gameData.value.money >= 75)  {
-    gameData.value.money -= 75
+  if (
+    gameData.value.playerSkills.shotgunSkill < 3 &&
+    gameData.value.money >= 75
+  ) {
+    gameData.value.money -= 75;
     gameData.value.playerSkills.shotgunSkill++;
   }
 };
@@ -222,47 +225,54 @@ const buySkin = (skin) => {
 };
 
 //Background canvas
-const changeBg = ref("")
-const li = 'flex flex-col items-center w-105 h-auto '
-const butt = "h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer  bg-black mt-4"
+const changeBg = ref("");
+const li = "flex flex-col items-center w-105 h-auto ";
+const butt =
+  "h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer  bg-black mt-4";
 const changeCanvasBackground = (image) => {
-changeBg.value = image
-console.log('hello')
-}
+  changeBg.value = image;
+  console.log("hello");
+};
 </script>
 
 <template>
   <!-- Home Page -->
   <section
     v-if="page === 'home'"
-    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
+  >
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
+    >
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
         :style="{
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
-        }">
+        }"
+      >
         Become Jesus
       </h1>
       <button
-        class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold  active:bg-black/40 ring-2 ring-white-300 rounded-full"
+        class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold active:bg-black/40 ring-2 ring-white-300 rounded-full"
         :style="{ WebkitTextStroke: '0.35px blue' }"
-        @click="handleStartGame">
+        @click="handleStartGame"
+      >
         Start
       </button>
 
       <button
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-10 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTutorial">
+        @click="handleOpenTutorial"
+      >
         ?
       </button>
 
       <button
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-15 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTheme">
+        @click="handleOpenTheme"
+      >
         theme
       </button>
     </div>
@@ -271,58 +281,67 @@ console.log('hello')
   <!-- Tutorial Page -->
   <section
     v-else-if="page === 'tutorial'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center"
+  >
     <div
       class="container flex h-full my-auto items-center justify-center"
-      id="container">
-      <div  id="slide-wrapper">
+      id="container"
+    >
+      <div id="slide-wrapper">
         <ul
           class="max-w-150 no-scrollbar h-180 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
           id="slide-list"
-          ref="scrollslide">
+          ref="scrollslide"
+        >
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
             v-for="data in TutorialData"
-            :key="index">
+            :key="index"
+          >
             <div
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
-              id="slide-link">
+              id="slide-link"
+            >
               <img
                 :src="`/src/assets/image/${data.img}`"
                 class="w-full rounded-lg aspect-video object-cover mb-3"
-                id="slide-image" />
+                id="slide-image"
+              />
               <p
-                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
+                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs"
+              >
                 {{ data.p1 }}
               </p>
               <div class="flex flex-col justify-between h-full">
                 <h2 class="text-lg text-black font-semibold" id="slide-title">
-                {{ data.p2 }}
-              </h2>
-              <div class="flex flex-col">
-                <div class="my-3 flex flex-row justify-around">
-                  <button
-                    v-on:click="goleft"
-                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
-                    <
-                  </button>
-                  <button
-                    v-on:click="goright"
-                    class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
+                  {{ data.p2 }}
+                </h2>
+                <div class="flex flex-col">
+                  <div class="my-3 flex flex-row justify-around">
+                    <button
+                      v-on:click="goleft"
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
                     >
-                  </button>
-                </div>
-                <div class="justify-center align-center flex flex-row">
-                  <button
-                    @click="handleClosePage"
-                    class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
-                    back
-                  </button>
+                      <
+                    </button>
+                    <button
+                      v-on:click="goright"
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
+                    >
+                      >
+                    </button>
+                  </div>
+                  <div class="justify-center align-center flex flex-row">
+                    <button
+                      @click="handleClosePage"
+                      class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
+                    >
+                      back
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-              
             </div>
           </li>
         </ul>
@@ -330,42 +349,60 @@ console.log('hello')
     </div>
   </section>
 
-   <!-- Theme Page -->
-    <section v-else-if="page === 'theme'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
-<div class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center">
-  <button
-                    @click="handleClosePage"
-                    class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer   bg-black">
-                    back
-  </button>
-  <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
-    <li :class="li">
-      <img src="./assets/image/canvas-bg1.gif" >
-      <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">Use</button>
-    </li>
-    <li :class="li">
-      <img src="./assets/image/canvas-bg1.gif" >
-      <button @click="changeCanvasBackground('canvas-bg1.gif')" :class="butt">Use</button>
-    </li>
-    <li :class="li">
-      <img src="./assets/image/canvas-bg1.gif" >
-      <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">Use</button>
-    </li>
-    <li :class="li">
-      <img src="./assets/image/canvas-bg1.gif" >
-      <button @click="changeCanvasBackground('canvas-bg1.gif')" :class="butt">Use</button>
-    </li>
-    
-    
-  </ul>
-</div>
-    </section>
+  <!-- Theme Page -->
+  <section
+    v-else-if="page === 'theme'"
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center"
+  >
+    <div
+      class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center"
+    >
+      <button
+        @click="handleClosePage"
+        class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer bg-black"
+      >
+        back
+      </button>
+      <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
+        <li :class="li">
+          <img src="./assets/image/canvas-bg1.gif" />
+          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
+            Use
+          </button>
+        </li>
+        <li :class="li">
+          <img src="./assets/image/canvas-bg1.gif" />
+          <button
+            @click="changeCanvasBackground('canvas-bg1.gif')"
+            :class="butt"
+          >
+            Use
+          </button>
+        </li>
+        <li :class="li">
+          <img src="./assets/image/canvas-bg1.gif" />
+          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
+            Use
+          </button>
+        </li>
+        <li :class="li">
+          <img src="./assets/image/canvas-bg1.gif" />
+          <button
+            @click="changeCanvasBackground('canvas-bg1.gif')"
+            :class="butt"
+          >
+            Use
+          </button>
+        </li>
+      </ul>
+    </div>
+  </section>
 
   <!-- Shop Page -->
   <section
     v-else-if="page === 'shop'"
-    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll">
+    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll"
+  >
     <div class="w-[95%] p-5 bg-base-100 rounded-xl">
       <div class="flex justify-between pb-5">
         <h1 class="text-5xl font-bold">Shop</h1>
@@ -374,7 +411,8 @@ console.log('hello')
         </h1>
         <button
           class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
-          @click="handleCloseShop">
+          @click="handleCloseShop"
+        >
           Close
         </button>
       </div>
@@ -389,7 +427,8 @@ console.log('hello')
             <div class="flex-col justify-items-center">
               <button
                 class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3"
-                @click="random">
+                @click="random"
+              >
                 Spin
               </button>
               <p>150$ = 1 spin</p>
@@ -403,7 +442,8 @@ console.log('hello')
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <button
               class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-              @click="handleShotgunSkill">
+              @click="handleShotgunSkill"
+            >
               Buy
             </button>
           </div>
@@ -417,7 +457,8 @@ console.log('hello')
             <div
               v-for="data in SkinData"
               :key="data.id"
-              class="card bg-base-300 shadow-sm">
+              class="card bg-base-300 shadow-sm"
+            >
               <div class="card-body">
                 <div class="flex justify-between items-center">
                   <h2 class="card-title">{{ data.name }}</h2>
@@ -426,7 +467,8 @@ console.log('hello')
                   <button
                     class="btn btn-primary"
                     :disabled="handleSkin(data) === 'Owned'"
-                    v-on:click="buySkin(data)">
+                    v-on:click="buySkin(data)"
+                  >
                     {{ handleSkin(data) }}
                   </button>
                 </div>
@@ -460,12 +502,12 @@ console.log('hello')
         >
           Shop
         </button>
-        
+
         <div class="flex-col ml-auto">
           <h1 class="text-3xl text-amber-200">
             High Score: <span class="text-white">{{ gameData.highScore }}</span>
           </h1>
-          <h1 class="text-3xl text-green-400"> 
+          <h1 class="text-3xl text-green-400">
             Money: <span class="text-white">{{ gameData.money }}$</span>
           </h1>
         </div>
@@ -474,7 +516,9 @@ console.log('hello')
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto " :class="`bg-[url(src/assets/image/`+ changeBg +`)]`">
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
+          :class="`bg-[url(src/assets/image/` + changeBg + `)]`"
+        >
         </canvas>
 
         <!-- Skill Status -->
@@ -485,7 +529,8 @@ console.log('hello')
               gameData.playerSkills.shotgunSkill > 0
                 ? 'bg-orange-500'
                 : 'bg-gray-500'
-            ">
+            "
+          >
             {{ gameData.playerSkills.shotgunSkill }}
           </div>
           <div
@@ -496,7 +541,8 @@ console.log('hello')
                 : gameData.playerSkills.mugen.cooldown
                 ? 'bg-gray-500'
                 : 'bg-orange-500'
-            ">
+            "
+          >
             {{
               gameData.playerSkills.mugen.active > 0
                 ? gameData.playerSkills.mugen.active
@@ -506,30 +552,32 @@ console.log('hello')
             }}
           </div>
         </div>
-        
+
         <!-- Tooltip   -->
-        <div class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500 ">
-          <div class="group-hover:hidden flex justify-center items-center border-black border-2 size-8 rounded-full">
+        <div
+          class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500"
+        >
+          <div
+            class="group-hover:hidden flex justify-center items-center border-black border-2 size-8 rounded-full"
+          >
             ?
           </div>
-          <div class="hidden group-hover:flex flex-col border border-black rounded p-5 bg-white">
+          <div
+            class="hidden group-hover:flex flex-col border border-black rounded p-5 bg-white"
+          >
             <p>W : jump</p>
             <p>S : down</p>
             <p>Q : shotgun</p>
             <p>E : Mugen</p>
           </div>
         </div>
-      
       </div>
 
       <div class="">
         <h2 class="text-3xl py-5 text-center">Press "Space" to restart</h2>
       </div>
-
     </div>
   </section>
 </template>
 
-<style>
-
-</style>
+<style></style>
