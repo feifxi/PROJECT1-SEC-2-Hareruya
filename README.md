@@ -2,11 +2,17 @@
 
 Project 2D Game referece by Chrome Dinosaur Game
 
-<img src="https://github.com/user-attachments/assets/1f5fed11-728f-44f8-a254-980928409c30" alt="Alt text" width="300" />
+<img src="https://github.com/user-attachments/assets/1f5fed11-728f-44f8-a254-980928409c30" alt="Chrome's No Internet Connection Dinosaur Game" width="300" />
 
 ## About
-"Become Jesus" is a 2D platformer game with a main goal of becoming **Jesus**. In order for you to become **Jesus**, you have to face many obstacles on your way. Be not afraid of death, as you can rewind and try again. Collect coins and save up to become **Jesus**! (Or you can put your luck to the test *wink wink*)\
-**You can do this!**
+"Become Jesus" is a 2D platformer game with a main goal of becoming **Jesus**. Jump through obstacles to avoid Game Over, but watch out for the floating ones by diving down to the ground. If you die (In Game), the score you accumulate will transfer into coins to buy a skill, gamble away and/or buy various skins & themes, including **Jesus**!
+
+## Controls
+- "W" : Jump
+- "S" : Dive
+- "Q" : Use Shotgun Skill
+- "E" : Use Mugen Skill
+- "Space" : Restart Game
 
 ## Skills (Wrote by yours truly, Hareluya)
 ### Shotgun
