@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import playerImgSrc from "./assets/image/player-default.png";
-import playerImgSrc2 from "./assets/image/player-default.png";
+import playerImgSrc from "./assets/image/sprites/player-default.png";
+import playerImgSrc2 from "./assets/image/sprites/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
@@ -127,6 +127,7 @@ const luckyDrawItems = [
   { name: "ExtraScore", percentage: 30 },
   { name: "Salt Muhaha", percentage: 40 },
 ];
+
 const random = () => {
   const randomNumber = Math.random() * 100;
   let cumulative = 0;
@@ -173,8 +174,8 @@ const random = () => {
   }
 };
 
-// Items Shop
-// - shot gun
+// Item Shop
+// Shotgun
 const handleShotgunSkill = () => {
   if (
     gameData.value.playerSkills.shotgunSkill < 3 &&
@@ -231,7 +232,6 @@ const butt =
   "h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer  bg-black mt-4";
 const changeCanvasBackground = (image) => {
   changeBg.value = image;
-  console.log("hello");
 };
 </script>
 
@@ -242,7 +242,7 @@ const changeCanvasBackground = (image) => {
     class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
   >
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
     >
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
@@ -365,30 +365,30 @@ const changeCanvasBackground = (image) => {
       </button>
       <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
-          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
+          <button @click="changeCanvasBackground('backgrounds/Home-bg.gif')" :class="butt">
             Use
           </button>
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <button
-            @click="changeCanvasBackground('canvas-bg1.gif')"
+            @click="changeCanvasBackground('backgrounds/canvas-bg1.gif')"
             :class="butt"
           >
             Use
           </button>
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
-          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
+          <button @click="changeCanvasBackground('backgrounds/Home-bg.gif')" :class="butt">
             Use
           </button>
         </li>
         <li :class="li">
-          <img src="./assets/image/canvas-bg1.gif" />
+          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
           <button
-            @click="changeCanvasBackground('canvas-bg1.gif')"
+            @click="changeCanvasBackground('backgrounds/canvas-bg1.gif')"
             :class="butt"
           >
             Use
