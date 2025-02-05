@@ -4,6 +4,7 @@ import playerImgSrc from "./assets/image/player-default.png";
 import playerImgSrc2 from "./assets/image/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
 
+
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
 const gameData = ref(
@@ -227,12 +228,33 @@ const buySkin = (skin) => {
 //Background canvas
 const changeBg = ref("");
 const li = "flex flex-col items-center w-105 h-auto ";
-const butt =
-  "h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer  bg-black mt-4";
-const changeCanvasBackground = (image) => {
-  changeBg.value = image;
-  console.log("hello");
-};
+const clickcheck = (index) =>{
+  if(index === 1) {
+    changeBg.value = 'Home-bg.gif'
+    document.getElementById('toggle-1').checked = true
+    document.getElementById('toggle-2').checked = false
+    document.getElementById('toggle-3').checked = false
+    document.getElementById('toggle-4').checked = false
+  }else if(index === 2) {
+    changeBg.value = 'canvas-bg1.gif'
+    document.getElementById('toggle-1').checked = false
+    document.getElementById('toggle-2').checked = true
+    document.getElementById('toggle-3').checked = false
+    document.getElementById('toggle-4').checked = false
+  }else if(index === 3) {
+    changeBg.value = 'Home-bg.gif'
+    document.getElementById('toggle-1').checked = false
+    document.getElementById('toggle-2').checked = false
+    document.getElementById('toggle-3').checked = true
+    document.getElementById('toggle-4').checked = false
+  }else if(index === 4) {
+    changeBg.value = 'canvas-bg1.gif'
+    document.getElementById('toggle-1').checked = false
+    document.getElementById('toggle-2').checked = false
+    document.getElementById('toggle-3').checked = false
+    document.getElementById('toggle-4').checked = true
+  }
+}
 </script>
 
 <template>
@@ -363,36 +385,23 @@ const changeCanvasBackground = (image) => {
       >
         back
       </button>
+
       <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
         <li :class="li">
           <img src="./assets/image/canvas-bg1.gif" />
-          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
-            Use
-          </button>
+          <input type="checkbox" @click="clickcheck(1)" class="toggle bg-black mt-5" id="toggle-1" />
         </li>
         <li :class="li">
           <img src="./assets/image/canvas-bg1.gif" />
-          <button
-            @click="changeCanvasBackground('canvas-bg1.gif')"
-            :class="butt"
-          >
-            Use
-          </button>
+          <input type="checkbox" @click="clickcheck(2)" class="toggle bg-black mt-5 toggle-primary" id="toggle-2" />
         </li>
         <li :class="li">
           <img src="./assets/image/canvas-bg1.gif" />
-          <button @click="changeCanvasBackground('Home-bg.gif')" :class="butt">
-            Use
-          </button>
+          <input type="checkbox" @click="clickcheck(3)" class="toggle bg-black mt-5 toggle-secondary" id="toggle-3" />
         </li>
         <li :class="li">
           <img src="./assets/image/canvas-bg1.gif" />
-          <button
-            @click="changeCanvasBackground('canvas-bg1.gif')"
-            :class="butt"
-          >
-            Use
-          </button>
+          <input type="checkbox" @click="clickcheck(4)" class="toggle bg-black mt-5 toggle-accent" id="toggle-4" />
         </li>
       </ul>
     </div>
