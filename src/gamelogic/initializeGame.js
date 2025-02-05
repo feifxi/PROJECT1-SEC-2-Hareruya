@@ -2,6 +2,7 @@ import { onEnemieCollision, onScoreCollision } from "./collision";
 import facebookEnemyImgSrc from "../assets/image/facebook-enemy.png";
 import robloxEnemyImgSrc from "../assets/image/roblox-enemy.png";
 import tiktokEnemyImgSrc from "../assets/image/tiktok-enemy.png";
+import jsEnemyImgSrc from "../assets/image/js-enemy.png";
 import shotgunImgSrc from "../assets/image/shotgun.png";
 import mugenImgSrc from "../assets/image/mugen.png";
 import shotgunSound from '../assets/sounds/shotgun.mp4'
@@ -16,7 +17,7 @@ export const initializeGame = (canvas, gameData) => {
   canvas.value.height = boardH;
 
   // Player Model Setup
-  // Img
+  // Skin Img
   const defaultPlayerImg = new Image();
   const shotgun = new Image();
   const mugen = new Image();
@@ -39,18 +40,33 @@ export const initializeGame = (canvas, gameData) => {
   };
 
   // Enemy Model Setup
-  const groundEnemyModel = {
+  // Skin Img
+  const tiktokEnemyImg = new Image();
+  const facebookEnemyImg = new Image();
+  const jsEnemyImg = new Image();
+  const robloxEnemyImg = new Image();
+  tiktokEnemyImg.src = tiktokEnemyImgSrc;
+  facebookEnemyImg.src = facebookEnemyImgSrc;
+  jsEnemyImg.src = jsEnemyImgSrc;
+  robloxEnemyImg.src = robloxEnemyImgSrc;
+
+  const enemySkins = [
+    tiktokEnemyImg,
+    facebookEnemyImg,
+    jsEnemyImg,
+    robloxEnemyImg,
+  ]
+
+  const enemyModel = {
     w: 70,
     h: 105,
     x: 920,
     y: boardH - 105,
-    img: new Image(),
+    img: tiktokEnemyImg,
     speed: -3, // speed to the left side of canvas
   };
-  groundEnemyModel.img.src = facebookEnemyImgSrc;
 
-  // Airenemy Model Setup
-  
+  const enemyArray = []; // contain all the enemy in the map  
 
   // Physics Setup
   const physics = {
@@ -58,7 +74,7 @@ export const initializeGame = (canvas, gameData) => {
     gravity: 0.23,
   };
 
-  const enemyArray = []; // contain all the enemy in the map
+
   let score = 0;
 
   // เพื่อ Clean up หลังการ reset game หรือ component unmounted
@@ -137,7 +153,13 @@ export const initializeGame = (canvas, gameData) => {
   enemyInterval = setInterval(() => {
     if (gameover) return;
 
-    const treeEnemy = Object.create(groundEnemyModel);
+    const treeEnemy = Object.create(enemyModel);
+    treeEnemy.img = enemySkins[Math.floor(Math.random() * 4)]
+    // Random fly enemy
+    const randomProp = Math.floor(Math.random() * 5)
+    if (randomProp === 0) {
+      treeEnemy.y = boardH - 210
+    }
     enemyArray.push(treeEnemy);
 
     if (enemyArray.length > 5) {
@@ -148,8 +170,8 @@ export const initializeGame = (canvas, gameData) => {
 
   // เพิ่มความเร็วของ Enemy ขึ้น 0.5 ทุกๆ 1 วิ
   speedInterval = setInterval(() => {
-    if (!gameover && groundEnemyModel.speed >= -20) {
-      groundEnemyModel.speed -= 0.5;
+    if (!gameover && enemyModel.speed >= -20) {
+      enemyModel.speed -= 0.5;
     }
   }, 1000);
 
