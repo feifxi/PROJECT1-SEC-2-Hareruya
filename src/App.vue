@@ -15,6 +15,7 @@ const gameData = ref(
         skin: {
           equipped: playerImgSrc,
           owned: [],
+          enemyIndex : 1
         },
         playerSkills: {
           extraScore: false, // have extra score
@@ -28,10 +29,11 @@ gameData.value.playerSkills.mugen = {
   cooldown: 0,
 };
 
+
 // Save Game Data before player exit
-window.addEventListener("beforeunload", (e) => {
-  localStorage.setItem("gameData", JSON.stringify(gameData.value));
-});
+// window.addEventListener("beforeunload", (e) => {
+//   localStorage.setItem("gameData", JSON.stringify(gameData.value));
+// });
 
 const page = ref("home");
 const canvas = ref(null); // reference t canvas element
@@ -230,24 +232,32 @@ const changeBg = ref("");
 const li = "flex flex-col items-center w-105 h-auto";
 const clickcheck = (index) =>{
   if (index === 1) {
+    gameData.value.skin.enemyIndex = 1
+    console.log(gameData.value.skin.enemyIndex)
     changeBg.value = 'backgrounds/Home-bg.gif';
     document.getElementById('toggle-1').checked = true;
     document.getElementById('toggle-2').checked = false;
     document.getElementById('toggle-3').checked = false;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 2) {
+    gameData.value.skin.enemyIndex = 2
+    console.log(gameData.value.skin.enemyIndex)
     changeBg.value = 'backgrounds/canvas-bg1.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = true;
     document.getElementById('toggle-3').checked = false;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 3) {
+    gameData.value.skin.enemyIndex = 3
+    console.log(gameData.value.skin.enemyIndex)
     changeBg.value = 'backgrounds/Home-bg.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = false;
     document.getElementById('toggle-3').checked = true;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 4) {
+    gameData.value.skin.enemyIndex = 4
+    console.log(gameData.value.skin.enemyIndex)
     changeBg.value = 'backgrounds/canvas-bg1.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = false;

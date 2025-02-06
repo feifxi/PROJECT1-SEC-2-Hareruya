@@ -54,11 +54,18 @@ export const initializeGame = (canvas, gameData) => {
   instagramImg.src = instagramImgSrc;
 
   const enemySkins = [
-    tiktokEnemyImg,
+    [tiktokEnemyImg,
     facebookEnemyImg,
-    fivemEnemyImg,
-    robloxEnemyImg,
-    instagramImg
+    ],
+    [fivemEnemyImg,
+     robloxEnemyImg,
+    ],
+    [tiktokEnemyImg,
+      facebookEnemyImg,
+      ],
+      [fivemEnemyImg,
+       robloxEnemyImg,]
+    // instagramImg
   ];
 
   const enemyModel = {
@@ -156,9 +163,11 @@ export const initializeGame = (canvas, gameData) => {
   // สร้าง Enemy ทุกๆ 1.5 วิ
   enemyInterval = setInterval(() => {
     if (gameover) return;
-
+    
+    // Use index to select enemy by theme
+    let index = gameData.value.skin.enemyIndex
     const treeEnemy = Object.create(enemyModel);
-    treeEnemy.img = enemySkins[Math.floor(Math.random() * 4)]
+    treeEnemy.img = enemySkins[index][Math.floor(Math.random() * 2)]
     // Random fly enemy
     const randomProp = Math.floor(Math.random() * 5)
     if (randomProp === 0) {
