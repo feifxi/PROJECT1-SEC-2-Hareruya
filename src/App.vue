@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 import playerImgSrc from "./assets/image/sprites/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
-import { luckyDrawItems, shopSkins } from "./constants";
+import { luckyDrawItems, shopSkins, tutorialData } from "./constants";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -50,9 +50,9 @@ document.addEventListener("keydown", (e) => {
 });
 
 
+// Page Handler
 const page = ref("home");
 
-// Page Handler
 const handleStartGame = () => {
   page.value = "game";
   startGame();
@@ -100,33 +100,11 @@ const goleft = () => {
   }
 };
 
-const TutorialData = [
-  {
-    img: "To1.jpg",
-    label: "About game",
-    description: "Press the W button to make your character jump over obstacles and S to make it down. If you hit an obstacle, the game will end. As you run and got enough score you will get coin to purchase skills and skin",
-  },
-  {
-    img: "To2.jpg",
-    label: "Skin and skills",
-    description: "When you collect enough coins, you can purchase Skins or Skills from the Shop. Additionally, you can buy random Skins. In terms of Skills, you can acquire the Shotgun skill to use during your runs or the Mugen skill, which blocks everything for you. As for Skins, there are various options available, ranging from Gojo to Jesus.",
-  },
-  {
-    img: "To3.jpg",
-    label: "Scoreboard",
-    description: "There are two Skills you can use: press Q to activate the Shotgun skill, which breaks the next obstacle, and press E to use the Mugen skill, making you invisible for 5 seconds. Both Skills can be purchased from the Shop Enjoy the game, and keep jumping until you become Jesus!",
-  },
-];
 
 // Shop Section
+
 // Lucky draw
 const luckyDrawResult = ref("random");
-// const luckyDrawItems = [
-//   { name: "Jesus", percentage: 5 },
-//   { name: "Shotgun", percentage: 25 },
-//   { name: "ExtraScore", percentage: 30 },
-//   { name: "Salt Muhaha", percentage: 40 },
-// ];
 
 const random = () => {
   const randomNumber = Math.random() * 100;
@@ -141,82 +119,49 @@ const random = () => {
           luckyDrawResult.value = luckyDrawItems[i++].name;
         } else i = 0;
       }, 100);
+
       setTimeout(() => {
         clearInterval(clearInt);
-        luckyDrawResult.value = item.name; // display the result item
-      }, 3000); // 3 sec
-
-      if (item.name === "Jesus") {
-        setTimeout(() => {
-          if (!gameData.skin.owned.includes("Jesus")) {
-            gameData.skin.owned.push("Jesus"); // add skin Jesus
-          }
-        }, 3050);
-      } else if (item.name === "Shotgun") {
-        setTimeout(() => {
+        // display the result item
+        luckyDrawResult.value = item.name; 
+        // Store the items
+        if (item.name === "Jesus" && !gameData.skin.owned.includes("Jesus")) {
+          gameData.skin.owned.push("Jesus");
+        }
+        else if (item.name === "Shotgun") {
           if (gameData.playerSkills.shotgunSkill < 3) {
-            handleShotgunSkill();
+            gameData.playerSkills.shotgunSkill = 3
           } else {
             gameData.money += 40;
           }
-        }, 3050); // add Shotgun bullet
-      } else if (item.name === "ExtraScore") {
-        setTimeout(() => {
+        } else if (item.name === "ExtraScore") {
           gameData.playerSkills.extraScore = true; // ExtraScore on
-        }, 3050);
-      } else if (item.name === "Salt Muhaha") {
-        setTimeout(() => {
+        } else if (item.name === "Salt Muhaha") {
           gameData.money += 50;
-        }, 3050);
-      }
+        }
+      }, 3000); // 3 sec
+
       return;
     }
   }
 };
 
-// Item Shop
-// Shotgun
-const handleShotgunSkill = () => {
-  if (
-    gameData.playerSkills.shotgunSkill < 3 &&
-    gameData.money >= 75
-  ) {
+
+// ฺBuy Shotgun
+const buyShotgunSkill = () => {
+  if (gameData.playerSkills.shotgunSkill < 3 && gameData.money >= 75) {
     gameData.money -= 75;
     gameData.playerSkills.shotgunSkill++;
   }
 };
 
-// Skin Shop
-// const SkinData = [
-//   {
-//     name: "Askaban",
-//     img: playerImgSrc2,
-//     price: 500,
-//   },
-//   {
-//     name: "gojo",
-//     img: playerImgSrc2,
-//     price: 1000,
-//   },
-//   {
-//     name: "Sung Jintoo",
-//     img: playerImgSrc2,
-//     price: 50,
-//   },
-//   {
-//     name: "Jesus",
-//     img: playerImgSrc2,
-//     price: 0,
-//     limited: true,
-//   },
-// ];
 
-//Manage purchase status
+// Manage purchase status
 const handleSkin = (skin) => {
   return gameData.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
 };
 
-//Buy Skin
+// Buy Skin
 const buySkin = (skin) => {
   const { name: skinName, price, img } = skin;
   if (skin.price <= gameData.money) {
@@ -326,7 +271,7 @@ const clickcheck = (index) =>{
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
-            v-for="(data, index) in TutorialData"
+            v-for="(data, index) in tutorialData"
             :key="index"
           >
             <div
@@ -459,7 +404,7 @@ const clickcheck = (index) =>{
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <button
               class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-              @click="handleShotgunSkill"
+              @click="buyShotgunSkill"
             >
               Buy
             </button>
