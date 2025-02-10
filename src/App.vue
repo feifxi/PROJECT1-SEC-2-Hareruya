@@ -11,7 +11,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 1000,
+        money: q0,
         skin: {
           equipped: playerImgSrc,
           owned: [],
@@ -102,7 +102,6 @@ const goleft = () => {
 
 
 // Shop Section
-
 // Lucky draw
 const luckyDrawResult = ref("random");
 
@@ -155,7 +154,6 @@ const buyShotgunSkill = () => {
   }
 };
 
-
 // Manage purchase status
 const handleSkin = (skin) => {
   return gameData.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
@@ -163,7 +161,7 @@ const handleSkin = (skin) => {
 
 // Buy Skin
 const buySkin = (skin) => {
-  const { name: skinName, price, img } = skin;
+  const { name: skinName, price } = skin;
   if (skin.price <= gameData.money) {
     gameData.skin.owned.push(skinName);
     gameData.money -= price;
