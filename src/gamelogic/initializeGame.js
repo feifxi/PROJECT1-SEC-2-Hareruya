@@ -215,7 +215,6 @@ export const initializeGame = (canvas, gameData) => {
       player.img = mugen;
       player.w = 108;
       player.h = 107;
-      player.y = defaultY - 31;
       player.baseY = defaultY - 31;
 
       // Show countdown for active skill
