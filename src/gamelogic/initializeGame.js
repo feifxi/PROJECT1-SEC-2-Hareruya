@@ -159,7 +159,7 @@ export const initializeGame = (canvas, gameData) => {
     
     // Use index to select enemy by theme
     const treeEnemy = Object.create(enemyModel);
-    treeEnemy.img = enemySkins[Math.floor(Math.random() * enemyArray.length)]
+    treeEnemy.img = enemySkins[Math.floor(Math.random() * enemyArray.length)];
     // Random fly enemy
     const randomProp = Math.floor(Math.random() * 5)
     if (randomProp === 0) {
