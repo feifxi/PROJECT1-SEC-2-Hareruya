@@ -1,21 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import playerImgSrc from "./assets/image/sprites/player-default.png";
-import playerImgSrc2 from "./assets/image/sprites/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
+import { luckyDrawItems, shopSkins } from "./constants";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
-const gameData = ref(
+const gameData = reactive(
   savedData
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 0,
+        money: 1000,
         skin: {
           equipped: playerImgSrc,
           owned: [],
-          enemyIndex : 1
         },
         playerSkills: {
           extraScore: false, // have extra score
@@ -24,7 +23,7 @@ const gameData = ref(
       }
 );
 // In-memory only skill
-gameData.value.playerSkills.mugen = {
+gameData.playerSkills.mugen = {
   active: 0,
   cooldown: 0,
 };
@@ -32,10 +31,9 @@ gameData.value.playerSkills.mugen = {
 
 // Save Game Data before player exit
 // window.addEventListener("beforeunload", (e) => {
-//   localStorage.setItem("gameData", JSON.stringify(gameData.value));
+//   localStorage.setItem("gameData", JSON.stringify(gameData));
 // });
 
-const page = ref("home");
 const canvas = ref(null); // reference t canvas element
 let endGame = null; // Function For clean up interval and others when game is ended
 
@@ -50,6 +48,9 @@ document.addEventListener("keydown", (e) => {
     startGame();
   }
 });
+
+
+const page = ref("home");
 
 // Page Handler
 const handleStartGame = () => {
@@ -101,34 +102,31 @@ const goleft = () => {
 
 const TutorialData = [
   {
-    id: 1,
     img: "To1.jpg",
-    p1: "About game",
-    p2: "Press the W button to make your character jump over obstacles and S to make it down. If you hit an obstacle, the game will end. As you run and got enough score you will get coin to purchase skills and skin",
+    label: "About game",
+    description: "Press the W button to make your character jump over obstacles and S to make it down. If you hit an obstacle, the game will end. As you run and got enough score you will get coin to purchase skills and skin",
   },
   {
-    id: 2,
     img: "To2.jpg",
-    p1: "Skin and skills",
-    p2: "When you collect enough coins, you can purchase Skins or Skills from the Shop. Additionally, you can buy random Skins. In terms of Skills, you can acquire the Shotgun skill to use during your runs or the Mugen skill, which blocks everything for you. As for Skins, there are various options available, ranging from Gojo to Jesus.",
+    label: "Skin and skills",
+    description: "When you collect enough coins, you can purchase Skins or Skills from the Shop. Additionally, you can buy random Skins. In terms of Skills, you can acquire the Shotgun skill to use during your runs or the Mugen skill, which blocks everything for you. As for Skins, there are various options available, ranging from Gojo to Jesus.",
   },
   {
-    id: 3,
     img: "To3.jpg",
-    p1: "Scoreboard",
-    p2: "There are two Skills you can use: press Q to activate the Shotgun skill, which breaks the next obstacle, and press E to use the Mugen skill, making you invisible for 5 seconds. Both Skills can be purchased from the Shop Enjoy the game, and keep jumping until you become Jesus!",
+    label: "Scoreboard",
+    description: "There are two Skills you can use: press Q to activate the Shotgun skill, which breaks the next obstacle, and press E to use the Mugen skill, making you invisible for 5 seconds. Both Skills can be purchased from the Shop Enjoy the game, and keep jumping until you become Jesus!",
   },
 ];
 
 // Shop Section
 // Lucky draw
 const luckyDrawResult = ref("random");
-const luckyDrawItems = [
-  { name: "Jesus", percentage: 5 },
-  { name: "Shotgun", percentage: 25 },
-  { name: "ExtraScore", percentage: 30 },
-  { name: "Salt Muhaha", percentage: 40 },
-];
+// const luckyDrawItems = [
+//   { name: "Jesus", percentage: 5 },
+//   { name: "Shotgun", percentage: 25 },
+//   { name: "ExtraScore", percentage: 30 },
+//   { name: "Salt Muhaha", percentage: 40 },
+// ];
 
 const random = () => {
   const randomNumber = Math.random() * 100;
@@ -150,25 +148,25 @@ const random = () => {
 
       if (item.name === "Jesus") {
         setTimeout(() => {
-          if (!gameData.value.skin.owned.includes("Jesus")) {
-            gameData.value.skin.owned.push("Jesus"); // add skin Jesus
+          if (!gameData.skin.owned.includes("Jesus")) {
+            gameData.skin.owned.push("Jesus"); // add skin Jesus
           }
         }, 3050);
       } else if (item.name === "Shotgun") {
         setTimeout(() => {
-          if (gameData.value.playerSkills.shotgunSkill < 3) {
+          if (gameData.playerSkills.shotgunSkill < 3) {
             handleShotgunSkill();
           } else {
-            gameData.value.money += 40;
+            gameData.money += 40;
           }
         }, 3050); // add Shotgun bullet
       } else if (item.name === "ExtraScore") {
         setTimeout(() => {
-          gameData.value.playerSkills.extraScore = true; // ExtraScore on
+          gameData.playerSkills.extraScore = true; // ExtraScore on
         }, 3050);
       } else if (item.name === "Salt Muhaha") {
         setTimeout(() => {
-          gameData.value.money += 50;
+          gameData.money += 50;
         }, 3050);
       }
       return;
@@ -180,50 +178,50 @@ const random = () => {
 // Shotgun
 const handleShotgunSkill = () => {
   if (
-    gameData.value.playerSkills.shotgunSkill < 3 &&
-    gameData.value.money >= 75
+    gameData.playerSkills.shotgunSkill < 3 &&
+    gameData.money >= 75
   ) {
-    gameData.value.money -= 75;
-    gameData.value.playerSkills.shotgunSkill++;
+    gameData.money -= 75;
+    gameData.playerSkills.shotgunSkill++;
   }
 };
 
 // Skin Shop
-const SkinData = [
-  {
-    name: "Askaban",
-    img: playerImgSrc2,
-    price: 500,
-  },
-  {
-    name: "gojo",
-    img: playerImgSrc2,
-    price: 1000,
-  },
-  {
-    name: "Sung Jintoo",
-    img: playerImgSrc2,
-    price: 50,
-  },
-  {
-    name: "Jesus",
-    img: playerImgSrc2,
-    price: 0,
-    limited: true,
-  },
-];
+// const SkinData = [
+//   {
+//     name: "Askaban",
+//     img: playerImgSrc2,
+//     price: 500,
+//   },
+//   {
+//     name: "gojo",
+//     img: playerImgSrc2,
+//     price: 1000,
+//   },
+//   {
+//     name: "Sung Jintoo",
+//     img: playerImgSrc2,
+//     price: 50,
+//   },
+//   {
+//     name: "Jesus",
+//     img: playerImgSrc2,
+//     price: 0,
+//     limited: true,
+//   },
+// ];
 
 //Manage purchase status
 const handleSkin = (skin) => {
-  return gameData.value.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
+  return gameData.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
 };
 
 //Buy Skin
 const buySkin = (skin) => {
   const { name: skinName, price, img } = skin;
-  if (skin.price <= gameData.value.money) {
-    gameData.value.skin.owned.push(skinName);
-    gameData.value.money -= price;
+  if (skin.price <= gameData.money) {
+    gameData.skin.owned.push(skinName);
+    gameData.money -= price;
   }
 };
 
@@ -232,32 +230,32 @@ const changeBg = ref("");
 const li = "flex flex-col items-center w-105 h-auto";
 const clickcheck = (index) =>{
   if (index === 1) {
-    gameData.value.skin.enemyIndex = 1
-    console.log(gameData.value.skin.enemyIndex)
+    gameData.skin.enemyIndex = 1
+    console.log(gameData.skin.enemyIndex)
     changeBg.value = 'backgrounds/Home-bg.gif';
     document.getElementById('toggle-1').checked = true;
     document.getElementById('toggle-2').checked = false;
     document.getElementById('toggle-3').checked = false;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 2) {
-    gameData.value.skin.enemyIndex = 2
-    console.log(gameData.value.skin.enemyIndex)
+    gameData.skin.enemyIndex = 2
+    console.log(gameData.skin.enemyIndex)
     changeBg.value = 'backgrounds/canvas-bg1.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = true;
     document.getElementById('toggle-3').checked = false;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 3) {
-    gameData.value.skin.enemyIndex = 3
-    console.log(gameData.value.skin.enemyIndex)
+    gameData.skin.enemyIndex = 3
+    console.log(gameData.skin.enemyIndex)
     changeBg.value = 'backgrounds/Home-bg.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = false;
     document.getElementById('toggle-3').checked = true;
     document.getElementById('toggle-4').checked = false;
   } else if (index === 4) {
-    gameData.value.skin.enemyIndex = 4
-    console.log(gameData.value.skin.enemyIndex)
+    gameData.skin.enemyIndex = 4
+    console.log(gameData.skin.enemyIndex)
     changeBg.value = 'backgrounds/canvas-bg1.gif';
     document.getElementById('toggle-1').checked = false;
     document.getElementById('toggle-2').checked = false;
@@ -328,7 +326,7 @@ const clickcheck = (index) =>{
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
-            v-for="data in TutorialData"
+            v-for="(data, index) in TutorialData"
             :key="index"
           >
             <div
@@ -343,11 +341,11 @@ const clickcheck = (index) =>{
               <p
                 class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs"
               >
-                {{ data.p1 }}
+                {{ data.label }}
               </p>
               <div class="flex flex-col justify-between h-full">
                 <h2 class="text-lg text-black font-semibold" id="slide-title">
-                  {{ data.p2 }}
+                  {{ data.description }}
                 </h2>
                 <div class="flex flex-col">
                   <div class="my-3 flex flex-row justify-around">
@@ -474,7 +472,7 @@ const clickcheck = (index) =>{
           <!-- skin list -->
           <div class="flex items-center justify-start gap-5">
             <div
-              v-for="data in SkinData"
+              v-for="data in shopSkins"
               :key="data.id"
               class="card bg-base-300 shadow-sm"
             >

@@ -22,7 +22,7 @@ export const initializeGame = (canvas, gameData) => {
   const defaultPlayerImg = new Image();
   const shotgun = new Image();
   const mugen = new Image();
-  defaultPlayerImg.src = gameData.value.skin.equipped;
+  defaultPlayerImg.src = gameData.skin.equipped;
   shotgun.src = shotgunImgSrc;
   mugen.src = mugenImgSrc;
 
@@ -54,18 +54,11 @@ export const initializeGame = (canvas, gameData) => {
   instagramImg.src = instagramImgSrc;
 
   const enemySkins = [
-    [tiktokEnemyImg,
+    tiktokEnemyImg, 
     facebookEnemyImg,
-    ],
-    [fivemEnemyImg,
-     robloxEnemyImg,
-    ],
-    [tiktokEnemyImg,
-      facebookEnemyImg,
-      ],
-      [fivemEnemyImg,
-       robloxEnemyImg,]
-    // instagramImg
+    fivemEnemyImg, 
+    robloxEnemyImg,
+    instagramImg
   ];
 
   const enemyModel = {
@@ -102,7 +95,7 @@ export const initializeGame = (canvas, gameData) => {
 
     // Handle Score
     context.font = "normal bold 20px Arial";
-    if (gameData.value.playerSkills.extraScore) {
+    if (gameData.playerSkills.extraScore) {
       context.fillStyle = "red";
       context.fillText("x2", boardW / 2 - 90, 30);
       context.fillStyle = "black";
@@ -125,7 +118,7 @@ export const initializeGame = (canvas, gameData) => {
       // Collision checking
       if (
         onEnemieCollision(player, tree) &&
-        gameData.value.playerSkills.mugen.active <= 0
+        gameData.playerSkills.mugen.active <= 0
       ) {
         gameover = true;
         context.font = "normal bold 20px Arial";
@@ -134,24 +127,24 @@ export const initializeGame = (canvas, gameData) => {
 
         // convert score to money
         const money = Math.round(score / 100) * 10;
-        gameData.value.money += money;
+        gameData.money += money;
 
         context.fillText("Game Over!", boardW / 2, boardH / 2);
         context.fillText(`Money: ${money}`, boardW / 2, boardH / 2 + 30);
         cancelAnimationFrame(animationFrameId);
 
         // Set new Highscore
-        if (gameData.value.highScore < score) {
+        if (gameData.highScore < score) {
           context.fillStyle = "red";
           context.fillText(
             "You Achive New High Score!",
             boardW / 2,
             boardH / 2 - 30
           );
-          gameData.value.highScore = score;
+          gameData.highScore = score;
         }
       } else if (onScoreCollision(player, tree)) {
-        if (gameData.value.playerSkills.extraScore) {
+        if (gameData.playerSkills.extraScore) {
           score += 2;
         } else {
           score++;
@@ -165,9 +158,8 @@ export const initializeGame = (canvas, gameData) => {
     if (gameover) return;
     
     // Use index to select enemy by theme
-    let index = gameData.value.skin.enemyIndex
     const treeEnemy = Object.create(enemyModel);
-    treeEnemy.img = enemySkins[index][Math.floor(Math.random() * 2)]
+    treeEnemy.img = enemySkins[Math.floor(Math.random() * enemyArray.length)]
     // Random fly enemy
     const randomProp = Math.floor(Math.random() * 5)
     if (randomProp === 0) {
@@ -197,11 +189,11 @@ export const initializeGame = (canvas, gameData) => {
       physics.velocityY = 30;
     } else if (
       e.code === "KeyQ" &&
-      gameData.value.playerSkills.shotgunSkill > 0 &&
-      gameData.value.playerSkills.mugen.active <= 0
+      gameData.playerSkills.shotgunSkill > 0 &&
+      gameData.playerSkills.mugen.active <= 0
     ) {
       enemyArray.splice(0, enemyArray.length);
-      gameData.value.playerSkills.shotgunSkill -= 1;
+      gameData.playerSkills.shotgunSkill -= 1;
 
       // change player img skin
       player.img = shotgun;
@@ -217,8 +209,8 @@ export const initializeGame = (canvas, gameData) => {
 
     } else if (
       e.code === "KeyE" &&
-      gameData.value.playerSkills.mugen.active <= 0 &&
-      gameData.value.playerSkills.mugen.cooldown <= 0
+      gameData.playerSkills.mugen.active <= 0 &&
+      gameData.playerSkills.mugen.cooldown <= 0
     ) {
       player.img = mugen;
       player.w = 108;
@@ -227,10 +219,10 @@ export const initializeGame = (canvas, gameData) => {
       player.baseY = defaultY - 31;
 
       // Show countdown for active skill
-      gameData.value.playerSkills.mugen.active = 5;
+      gameData.playerSkills.mugen.active = 5;
       const clearInt1 = setInterval(() => {
-        --gameData.value.playerSkills.mugen.active;
-        if (gameData.value.playerSkills.mugen.active <= 0) {
+        --gameData.playerSkills.mugen.active;
+        if (gameData.playerSkills.mugen.active <= 0) {
           clearInterval(clearInt1);
           player.img = defaultPlayerImg;
           player.w = defaultWidth;
@@ -241,11 +233,11 @@ export const initializeGame = (canvas, gameData) => {
 
       // Set Cooldown after deactive skill
       setTimeout(() => {
-        gameData.value.playerSkills.mugen.active = 0;
-        gameData.value.playerSkills.mugen.cooldown = 15;
+        gameData.playerSkills.mugen.active = 0;
+        gameData.playerSkills.mugen.cooldown = 15;
         const clearInt2 = setInterval(() => {
-          --gameData.value.playerSkills.mugen.cooldown;
-          if (gameData.value.playerSkills.mugen.cooldown <= 0) {
+          --gameData.playerSkills.mugen.cooldown;
+          if (gameData.playerSkills.mugen.cooldown <= 0) {
             clearInterval(clearInt2);
           }
         }, 1000);
@@ -261,12 +253,12 @@ export const initializeGame = (canvas, gameData) => {
 
   // Return cleanup function
   return () => {
-    gameData.value.playerSkills.mugen.active = 0
-    gameData.value.playerSkills.mugen.cooldown = 0
+    gameData.playerSkills.mugen.active = 0
+    gameData.playerSkills.mugen.cooldown = 0
     cancelAnimationFrame(animationFrameId);
     clearInterval(enemyInterval);
     clearInterval(speedInterval);
     document.removeEventListener("keydown", handleKeydown);
-    gameData.value.playerSkills.extraScore = false;
+    gameData.playerSkills.extraScore = false;
   };
 };
