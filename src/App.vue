@@ -12,7 +12,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 0,
+        money: 1000,
         skin: {
           equipped: shopSkins[0],
           owned: ['Default'],
@@ -34,6 +34,12 @@ gameData.playerSkills.mugen = {
 // window.addEventListener("beforeunload", (e) => {
 //   localStorage.setItem("gameData", JSON.stringify(gameData));
 // });
+
+
+// Hack Mode 
+const addMonney = () => {
+  gameData.monney = 1000;
+}
 
 const canvas = ref(null); // reference t canvas element
 let endGame = null; // Function For clean up interval and others when game is ended
@@ -181,34 +187,40 @@ const setBackground = (theme) => {
     v-if="page === 'home'"
     class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
         :style="{
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
-        }">
+        }"
+      >
         Become Unemployed
       </h1>
-      <button
-        class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold active:bg-black/40 ring-2 ring-white-300 rounded-full"
-        :style="{ WebkitTextStroke: '0.35px blue' }"
-        @click="handleStartGame">
-        Start
-      </button>
+      
+      <div class="flex justify-around text-white">
+        <button
+          class="btn btn-circle py-7 px-10 text-xl bg-black/80  active:bg-black/50 float-right text-center ring-2 ring-white-300"
+          @click="handleOpenTheme"
+        >
+          theme
+        </button>
+        <button
+          class="btn btn-circle w-[200px] h-[100px] bg-black/80  text-6xl font-bold active:bg-black/40 ring-2 ring-white-300"
+          :style="{ WebkitTextStroke: '0.35px blue' }"
+          @click="handleStartGame"
+        >
+          Start
+        </button>
 
-      <button
-        class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-10 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTutorial">
-        ?
-      </button>
-
-      <button
-        class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-15 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTheme">
-        theme
-      </button>
+        <button
+          class="btn btn-circle p-7 text-xl bg-black/80 active:bg-black/50 float-right text-center ring-2 ring-white-300"
+          @click="handleOpenTutorial"
+        >
+          ?
+        </button>
+      </div>
     </div>
   </section>
 
