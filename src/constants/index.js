@@ -2,6 +2,7 @@ import playerHogwartsImgSrc from "../assets/image/sprites/player-hogwarts.png";
 import playerMonkImgSrc from "../assets/image/sprites/player-monk.png";
 import playerJesusImgSrc from "../assets/image/sprites/player-jesus.png";
 import playerGraduateImgSrc from "../assets/image/sprites/player-graduate.png";
+import playerImgSrc from "../assets/image/sprites/player-default.png";
 import background1 from "../assets/image/backgrounds/background1.jpg"
 import background2 from "../assets/image/backgrounds/background2.gif"
 import background3 from "../assets/image/backgrounds/background3.jpg"
@@ -14,6 +15,11 @@ export const luckyDrawItems = [
 ]
 
 export const shopSkins = [
+    {
+        name: "Default",
+        img: playerImgSrc,
+        price: 0,
+    },
     {
         name: "Monk",
         img: playerMonkImgSrc,
@@ -33,7 +39,6 @@ export const shopSkins = [
         name: "Unemployed",
         img: playerGraduateImgSrc,
         price: 0,
-        limited: true,
     },
 ];
 
