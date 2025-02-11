@@ -2,7 +2,8 @@
 import { reactive, ref } from "vue";
 import playerImgSrc from "./assets/image/sprites/player-default.png";
 import { initializeGame } from "./gamelogic/initializeGame";
-import { luckyDrawItems, shopSkins, tutorialData } from "./constants";
+import { luckyDrawItems, shopSkins, tutorialData , ThemeData } from "./constants";
+
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -11,7 +12,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 10000,
+        money: 0,
         skin: {
           equipped: shopSkins[0],
           owned: ['Default'],
@@ -20,6 +21,7 @@ const gameData = reactive(
           extraScore: false, // have extra score
           shotgunSkill: 0, // number of bullet
         },
+        theme: ThemeData[0]
       }
 );
 // In-memory only skill
@@ -88,8 +90,10 @@ const handleClosePage = () => {
 const scrollslide = ref(null);
 
 const goright = () => {
-  if (scrollslide.value) {
-    scrollslide.value.scrollLeft += 550;
+  if(scrollslide.value) {
+    scrollslide.value.scrollLeft += 550
+  }if(scrollslide.value.scrollLeft > 1000) {
+    scrollslide.value.scrollLeft = 0 ;
   }
 };
 const goleft = () => {
@@ -159,49 +163,13 @@ const buySkin = (skin) => {
   }
 };
 
-// equip skin
-const equipSkin = (skin) => {
-  gameData.skin.equipped = skin;
+
+// Set Background Theme
+const setBackground = (theme) => {
+  gameData.theme = theme
 };
 
-//Background canvas
-const changeBg = ref("");
-const li = "flex flex-col items-center w-105 h-auto";
-const clickcheck = (index) => {
-  if (index === 1) {
-    gameData.skin.enemyIndex = 1;
-    console.log(gameData.skin.enemyIndex);
-    changeBg.value = "backgrounds/Home-bg.gif";
-    document.getElementById("toggle-1").checked = true;
-    document.getElementById("toggle-2").checked = false;
-    document.getElementById("toggle-3").checked = false;
-    document.getElementById("toggle-4").checked = false;
-  } else if (index === 2) {
-    gameData.skin.enemyIndex = 2;
-    console.log(gameData.skin.enemyIndex);
-    changeBg.value = "backgrounds/canvas-bg1.gif";
-    document.getElementById("toggle-1").checked = false;
-    document.getElementById("toggle-2").checked = true;
-    document.getElementById("toggle-3").checked = false;
-    document.getElementById("toggle-4").checked = false;
-  } else if (index === 3) {
-    gameData.skin.enemyIndex = 3;
-    console.log(gameData.skin.enemyIndex);
-    changeBg.value = "backgrounds/Home-bg.gif";
-    document.getElementById("toggle-1").checked = false;
-    document.getElementById("toggle-2").checked = false;
-    document.getElementById("toggle-3").checked = true;
-    document.getElementById("toggle-4").checked = false;
-  } else if (index === 4) {
-    gameData.skin.enemyIndex = 4;
-    console.log(gameData.skin.enemyIndex);
-    changeBg.value = "backgrounds/canvas-bg1.gif";
-    document.getElementById("toggle-1").checked = false;
-    document.getElementById("toggle-2").checked = false;
-    document.getElementById("toggle-3").checked = false;
-    document.getElementById("toggle-4").checked = true;
-  }
-};
+
 </script>
 
 <template>
@@ -305,49 +273,28 @@ const clickcheck = (index) => {
   <!-- Theme Page -->
   <section
     v-else-if="page === 'theme'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
-    <div
-      class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center">
+    class="z-50 bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
+  >
+    <div class="relative rounded-xl bg-white p-5 pt-10 flex flex-col items-center">
       <button
         @click="handleClosePage"
-        class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer bg-black">
-        Back
+        class="btn btn-accent absolute right-10 top-3"
+      >
+        Back 
       </button>
 
-      <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
-        <li :class="li">
-          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input
-            type="checkbox"
-            @click="clickcheck(1)"
-            class="toggle bg-black mt-5"
-            id="toggle-1" />
-        </li>
-        <li :class="li">
-          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input
-            type="checkbox"
-            @click="clickcheck(2)"
-            class="toggle bg-black mt-5 toggle-primary"
-            id="toggle-2" />
-        </li>
-        <li :class="li">
-          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input
-            type="checkbox"
-            @click="clickcheck(3)"
-            class="toggle bg-black mt-5 toggle-secondary"
-            id="toggle-3" />
-        </li>
-        <li :class="li">
-          <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input
-            type="checkbox"
-            @click="clickcheck(4)"
-            class="toggle bg-black mt-5 toggle-accent"
-            id="toggle-4" />
-        </li>
-      </ul>
+      <!-- Themes -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 p-5">
+        <div v-for="(theme , index) in ThemeData" class="text-center" :key="index">
+          <div v-if="theme.img === ''" class=" bg-blue-100 border-b-[15px] border-b-orange-950 h-[200px]"></div>  
+          <img 
+            v-if="theme.img !== ''" 
+            :src="theme.img" 
+            class="object-cover w-[400px] h-[200px]"
+          />
+          <button class="btn btn-primary m-3 mb-0" @click="setBackground(theme)" :disabled="gameData.theme.name === theme.name">Equip</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -392,7 +339,8 @@ const clickcheck = (index) => {
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <button
               class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-              @click="buyShotgunSkill">
+              @click="buyShotgunSkill"
+            >
               Buy
             </button>
           </div>
@@ -440,7 +388,9 @@ const clickcheck = (index) => {
       <div class="flex gap-5 py-5">
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleBackHome">
+          @click="handleBackHome"
+        >
+
           Back to home
         </button>
         <button
@@ -462,8 +412,10 @@ const clickcheck = (index) => {
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
-          :class="`bg-[url(src/assets/image/` + changeBg + `)]`">
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto bg-no-repeat bg-cover center"
+          :style="{ 
+            backgroundImage: `url(${gameData.theme.img})` }"
+        >
         </canvas>
 
         <!-- Skill Status -->
