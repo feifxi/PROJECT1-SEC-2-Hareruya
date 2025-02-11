@@ -56,21 +56,21 @@ export const tutorialData = [
 ];
 
 export const ThemeData = [
-     {  
+    {  
         name:'default' ,
         img: '' ,
-     },
-     {  
+    },
+    {  
         name:'background-1' ,
         img: background1
-     },
-     {
+    },
+    {
         name:'background-2' ,
         img: background2
-     },
-     {
+    },
+    {
         name:'background-3' ,
-       img: background3
-     }
+        img: background3
+    }
 
 ]

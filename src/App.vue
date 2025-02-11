@@ -172,9 +172,9 @@ const buySkin = (skin) => {
   }
 };
 
-//Background canvas
+// Set Background Theme
 const setBackground = (theme) => {
-
+  gameData.theme = theme
 };
 
 </script>
@@ -298,24 +298,24 @@ const setBackground = (theme) => {
     v-else-if="page === 'theme'"
     class="z-50 bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
   >
-    <div class="relative w-375 rounded-xl bg-white p-5 flex flex-col items-center">
+    <div class="relative rounded-xl bg-white p-5 pt-10 flex flex-col items-center">
       <button
         @click="handleClosePage"
-        class="btn btn-primary absolute right-10"
+        class="btn btn-accent absolute right-10 top-3"
       >
         Back 
       </button>
 
       <!-- Themes -->
-      <div class="grid grid-cols-2 gap-10">
-        <div v-for="(theme , index ) in ThemeData" class="text-center" :key="index">
-          <div v-if="theme.img === ''" class="w-[500px] h-[300px] bg-blue-100 border-b-[15px] border-b-orange-950"></div>  
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 p-5">
+        <div v-for="(theme , index) in ThemeData" class="text-center" :key="index">
+          <div v-if="theme.img === ''" class=" bg-blue-100 border-b-[15px] border-b-orange-950 h-[200px]"></div>  
           <img 
-            v-if="theme.img !== ''"
+            v-if="theme.img !== ''" 
             :src="theme.img" 
-            class="object-cover w-[500px] h-[300px]"
+            class="object-cover w-[400px] h-[200px]"
           />
-          <button class="btn btn-primary m-3 mb-0" @click="setBackground(theme)" >Equip</button>
+          <button class="btn btn-primary m-3 mb-0" @click="setBackground(theme)" :disabled="gameData.theme.name === theme.name">Equip</button>
         </div>
       </div>
       
@@ -441,8 +441,9 @@ const setBackground = (theme) => {
       <div class="relative">
         <canvas
           ref="canvas"
-          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
-          :class="gameData.theme.img ? `bg-[url(`+ gameData.theme.img+`)]` : ''"
+          class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto bg-no-repeat bg-cover center"
+          :style="{ 
+            backgroundImage: `url(${gameData.theme.img})` }"
         >
         </canvas>
 
