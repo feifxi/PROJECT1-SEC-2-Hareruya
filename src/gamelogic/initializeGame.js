@@ -22,7 +22,7 @@ export const initializeGame = (canvas, gameData) => {
   const defaultPlayerImg = new Image();
   const shotgun = new Image();
   const mugen = new Image();
-  defaultPlayerImg.src = gameData.skin.equipped;
+  defaultPlayerImg.src = gameData.skin.equipped.img;
   shotgun.src = shotgunImgSrc;
   mugen.src = mugenImgSrc;
 

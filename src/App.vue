@@ -11,10 +11,10 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: q0,
+        money: 10000,
         skin: {
-          equipped: playerImgSrc,
-          owned: [],
+          equipped: shopSkins[0],
+          owned: ['Default'],
         },
         playerSkills: {
           extraScore: false, // have extra score
@@ -27,7 +27,6 @@ gameData.playerSkills.mugen = {
   active: 0,
   cooldown: 0,
 };
-
 
 // Save Game Data before player exit
 // window.addEventListener("beforeunload", (e) => {
@@ -48,7 +47,6 @@ document.addEventListener("keydown", (e) => {
     startGame();
   }
 });
-
 
 // Page Handler
 const page = ref("home");
@@ -100,7 +98,6 @@ const goleft = () => {
   }
 };
 
-
 // Shop Section
 // Lucky draw
 const luckyDrawResult = ref("random");
@@ -122,14 +119,13 @@ const random = () => {
       setTimeout(() => {
         clearInterval(clearInt);
         // display the result item
-        luckyDrawResult.value = item.name; 
+        luckyDrawResult.value = item.name;
         // Store the items
         if (item.name === "Jesus" && !gameData.skin.owned.includes("Jesus")) {
           gameData.skin.owned.push("Jesus");
-        }
-        else if (item.name === "Shotgun") {
-          if (gameData.playerSkills.shotgunSkill < 3) {
-            gameData.playerSkills.shotgunSkill = 3
+        } else if (item.name === "Shotgun") {
+          if (gameData.playerSkills.shotgunSkill < 10) {
+            gameData.playerSkills.shotgunSkill = 10;
           } else {
             gameData.money += 40;
           }
@@ -145,107 +141,101 @@ const random = () => {
   }
 };
 
-
 // ฺBuy Shotgun
 const buyShotgunSkill = () => {
-  if (gameData.playerSkills.shotgunSkill < 3 && gameData.money >= 75) {
-    gameData.money -= 75;
+  if (gameData.playerSkills.shotgunSkill < 10 && gameData.money >= 50) {
+    gameData.money -= 50;
     gameData.playerSkills.shotgunSkill++;
   }
 };
 
-// Manage purchase status
-const handleSkin = (skin) => {
-  return gameData.skin.owned.includes(skin.name) ? "Owned" : "Buy Now";
-};
 
 // Buy Skin
 const buySkin = (skin) => {
-  const { name: skinName, price } = skin;
   if (skin.price <= gameData.money) {
-    gameData.skin.owned.push(skinName);
-    gameData.money -= price;
+    gameData.skin.owned.push(skin.name);
+    gameData.money -= skin.price;
+    console.log(gameData.skin.owned)
   }
+};
+
+// equip skin
+const equipSkin = (skin) => {
+  gameData.skin.equipped = skin;
 };
 
 //Background canvas
 const changeBg = ref("");
 const li = "flex flex-col items-center w-105 h-auto";
-const clickcheck = (index) =>{
+const clickcheck = (index) => {
   if (index === 1) {
-    gameData.skin.enemyIndex = 1
-    console.log(gameData.skin.enemyIndex)
-    changeBg.value = 'backgrounds/Home-bg.gif';
-    document.getElementById('toggle-1').checked = true;
-    document.getElementById('toggle-2').checked = false;
-    document.getElementById('toggle-3').checked = false;
-    document.getElementById('toggle-4').checked = false;
+    gameData.skin.enemyIndex = 1;
+    console.log(gameData.skin.enemyIndex);
+    changeBg.value = "backgrounds/Home-bg.gif";
+    document.getElementById("toggle-1").checked = true;
+    document.getElementById("toggle-2").checked = false;
+    document.getElementById("toggle-3").checked = false;
+    document.getElementById("toggle-4").checked = false;
   } else if (index === 2) {
-    gameData.skin.enemyIndex = 2
-    console.log(gameData.skin.enemyIndex)
-    changeBg.value = 'backgrounds/canvas-bg1.gif';
-    document.getElementById('toggle-1').checked = false;
-    document.getElementById('toggle-2').checked = true;
-    document.getElementById('toggle-3').checked = false;
-    document.getElementById('toggle-4').checked = false;
+    gameData.skin.enemyIndex = 2;
+    console.log(gameData.skin.enemyIndex);
+    changeBg.value = "backgrounds/canvas-bg1.gif";
+    document.getElementById("toggle-1").checked = false;
+    document.getElementById("toggle-2").checked = true;
+    document.getElementById("toggle-3").checked = false;
+    document.getElementById("toggle-4").checked = false;
   } else if (index === 3) {
-    gameData.skin.enemyIndex = 3
-    console.log(gameData.skin.enemyIndex)
-    changeBg.value = 'backgrounds/Home-bg.gif';
-    document.getElementById('toggle-1').checked = false;
-    document.getElementById('toggle-2').checked = false;
-    document.getElementById('toggle-3').checked = true;
-    document.getElementById('toggle-4').checked = false;
+    gameData.skin.enemyIndex = 3;
+    console.log(gameData.skin.enemyIndex);
+    changeBg.value = "backgrounds/Home-bg.gif";
+    document.getElementById("toggle-1").checked = false;
+    document.getElementById("toggle-2").checked = false;
+    document.getElementById("toggle-3").checked = true;
+    document.getElementById("toggle-4").checked = false;
   } else if (index === 4) {
-    gameData.skin.enemyIndex = 4
-    console.log(gameData.skin.enemyIndex)
-    changeBg.value = 'backgrounds/canvas-bg1.gif';
-    document.getElementById('toggle-1').checked = false;
-    document.getElementById('toggle-2').checked = false;
-    document.getElementById('toggle-3').checked = false;
-    document.getElementById('toggle-4').checked = true;
+    gameData.skin.enemyIndex = 4;
+    console.log(gameData.skin.enemyIndex);
+    changeBg.value = "backgrounds/canvas-bg1.gif";
+    document.getElementById("toggle-1").checked = false;
+    document.getElementById("toggle-2").checked = false;
+    document.getElementById("toggle-3").checked = false;
+    document.getElementById("toggle-4").checked = true;
   }
-}
+};
 </script>
 
 <template>
   <!-- Home Page -->
   <section
     v-if="page === 'home'"
-    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
-    >
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white flex flex-col gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
       <h1
         class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
         :style="{
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
-        }"
-      >
+        }">
         Become Jesus
       </h1>
       <button
         class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold active:bg-black/40 ring-2 ring-white-300 rounded-full"
         :style="{ WebkitTextStroke: '0.35px blue' }"
-        @click="handleStartGame"
-      >
+        @click="handleStartGame">
         Start
       </button>
 
       <button
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-10 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTutorial"
-      >
+        @click="handleOpenTutorial">
         ?
       </button>
 
       <button
         class="btn mt-4 bg-black/80 py-3 px-4 text-white rounded-full active:bg-black/50 float-right mx-5 w-15 h-10 text-center ring-2 ring-white-300"
-        @click="handleOpenTheme"
-      >
+        @click="handleOpenTheme">
         theme
       </button>
     </div>
@@ -254,36 +244,29 @@ const clickcheck = (index) =>{
   <!-- Tutorial Page -->
   <section
     v-else-if="page === 'tutorial'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
       class="container flex h-full my-auto items-center justify-center"
-      id="container"
-    >
+      id="container">
       <div id="slide-wrapper">
         <ul
           class="max-w-150 no-scrollbar h-180 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
           id="slide-list"
-          ref="scrollslide"
-        >
+          ref="scrollslide">
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
             v-for="(data, index) in tutorialData"
-            :key="index"
-          >
+            :key="index">
             <div
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
-              id="slide-link"
-            >
+              id="slide-link">
               <img
                 :src="`/src/assets/image/backgrounds/${data.img}`"
                 class="w-full rounded-lg aspect-video object-cover mb-3"
-                id="slide-image"
-              />
+                id="slide-image" />
               <p
-                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs"
-              >
+                class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
                 {{ data.label }}
               </p>
               <div class="flex flex-col justify-between h-full">
@@ -294,22 +277,19 @@ const clickcheck = (index) =>{
                   <div class="my-3 flex flex-row justify-around">
                     <button
                       v-on:click="goleft"
-                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                    >
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                       <
                     </button>
                     <button
                       v-on:click="goright"
-                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                    >
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                       >
                     </button>
                   </div>
                   <div class="justify-center align-center flex flex-row">
                     <button
                       @click="handleClosePage"
-                      class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white"
-                    >
+                      class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
                       back
                     </button>
                   </div>
@@ -325,34 +305,47 @@ const clickcheck = (index) =>{
   <!-- Theme Page -->
   <section
     v-else-if="page === 'theme'"
-    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center"
-  >
+    class="z-50 bg-black w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center"
-    >
+      class="w-375 rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-175 flex flex-col min-h-175 items-center">
       <button
         @click="handleClosePage"
-        class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer bg-black"
-      >
+        class="h-8 w-18 rounded-full border-1 border-blue-500 text-white mx-2 my-1 curser-pointer bg-black">
         Back
       </button>
 
       <ul class="w-full h-full grid grid-cols-2 grid-rows-2 place-items-center">
         <li :class="li">
           <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input type="checkbox" @click="clickcheck(1)" class="toggle bg-black mt-5" id="toggle-1" />
+          <input
+            type="checkbox"
+            @click="clickcheck(1)"
+            class="toggle bg-black mt-5"
+            id="toggle-1" />
         </li>
         <li :class="li">
           <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input type="checkbox" @click="clickcheck(2)" class="toggle bg-black mt-5 toggle-primary" id="toggle-2" />
+          <input
+            type="checkbox"
+            @click="clickcheck(2)"
+            class="toggle bg-black mt-5 toggle-primary"
+            id="toggle-2" />
         </li>
         <li :class="li">
           <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input type="checkbox" @click="clickcheck(3)" class="toggle bg-black mt-5 toggle-secondary" id="toggle-3" />
+          <input
+            type="checkbox"
+            @click="clickcheck(3)"
+            class="toggle bg-black mt-5 toggle-secondary"
+            id="toggle-3" />
         </li>
         <li :class="li">
           <img src="./assets/image/backgrounds/canvas-bg1.gif" />
-          <input type="checkbox" @click="clickcheck(4)" class="toggle bg-black mt-5 toggle-accent" id="toggle-4" />
+          <input
+            type="checkbox"
+            @click="clickcheck(4)"
+            class="toggle bg-black mt-5 toggle-accent"
+            id="toggle-4" />
         </li>
       </ul>
     </div>
@@ -361,8 +354,7 @@ const clickcheck = (index) =>{
   <!-- Shop Page -->
   <section
     v-else-if="page === 'shop'"
-    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll"
-  >
+    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll">
     <div class="w-[95%] p-5 bg-base-100 rounded-xl">
       <div class="flex justify-between pb-5">
         <h1 class="text-5xl font-bold">Shop</h1>
@@ -371,8 +363,7 @@ const clickcheck = (index) =>{
         </h1>
         <button
           class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
-          @click="handleCloseShop"
-        >
+          @click="handleCloseShop">
           Close
         </button>
       </div>
@@ -387,8 +378,7 @@ const clickcheck = (index) =>{
             <div class="flex-col justify-items-center">
               <button
                 class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3"
-                @click="random"
-              >
+                @click="random">
                 Spin
               </button>
               <p>150$ = 1 spin</p>
@@ -402,8 +392,7 @@ const clickcheck = (index) =>{
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <button
               class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
-              @click="buyShotgunSkill"
-            >
+              @click="buyShotgunSkill">
               Buy
             </button>
           </div>
@@ -417,8 +406,7 @@ const clickcheck = (index) =>{
             <div
               v-for="data in shopSkins"
               :key="data.id"
-              class="card bg-base-300 shadow-sm"
-            >
+              class="card bg-base-300 shadow-sm">
               <div class="card-body">
                 <div class="flex justify-between items-center">
                   <h2 class="card-title">{{ data.name }}</h2>
@@ -426,10 +414,10 @@ const clickcheck = (index) =>{
                   <h2 class="" v-if="data.limited">{{ "Limited!!" }}</h2>
                   <button
                     class="btn btn-primary"
-                    :disabled="handleSkin(data) === 'Owned'"
-                    v-on:click="buySkin(data)"
+                    @click="gameData.skin.owned.includes(data.name) ? equipSkin(data) : buySkin(data)"
+                    :disabled="gameData.skin.equipped.img === data.img"
                   >
-                    {{ handleSkin(data) }}
+                    {{ gameData.skin.owned.includes(data.name) ? 'Equip' : 'Buy now' }}
                   </button>
                 </div>
                 <p>{{ data.word }}</p>
@@ -452,14 +440,12 @@ const clickcheck = (index) =>{
       <div class="flex gap-5 py-5">
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleBackHome"
-        >
+          @click="handleBackHome">
           Back to home
         </button>
         <button
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
-          @click="handleOpenShop"
-        >
+          @click="handleOpenShop">
           Shop
         </button>
 
@@ -477,8 +463,7 @@ const clickcheck = (index) =>{
         <canvas
           ref="canvas"
           class="bg-blue-100 border-b-[15px] border-b-orange-950 mx-auto"
-          :class="`bg-[url(src/assets/image/` + changeBg + `)]`"
-        >
+          :class="`bg-[url(src/assets/image/` + changeBg + `)]`">
         </canvas>
 
         <!-- Skill Status -->
@@ -489,8 +474,7 @@ const clickcheck = (index) =>{
               gameData.playerSkills.shotgunSkill > 0
                 ? 'bg-orange-500'
                 : 'bg-gray-500'
-            "
-          >
+            ">
             {{ gameData.playerSkills.shotgunSkill }}
           </div>
           <div
@@ -501,8 +485,7 @@ const clickcheck = (index) =>{
                 : gameData.playerSkills.mugen.cooldown
                 ? 'bg-gray-500'
                 : 'bg-orange-500'
-            "
-          >
+            ">
             {{
               gameData.playerSkills.mugen.active > 0
                 ? gameData.playerSkills.mugen.active
@@ -515,16 +498,13 @@ const clickcheck = (index) =>{
 
         <!-- Tooltip   -->
         <div
-          class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500"
-        >
+          class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500">
           <div
-            class="group-hover:hidden flex justify-center items-center border-black border-2 size-8 rounded-full"
-          >
+            class="group-hover:hidden flex justify-center items-center border-black border-2 size-8 rounded-full">
             ?
           </div>
           <div
-            class="hidden group-hover:flex flex-col border border-black rounded p-5 bg-white"
-          >
+            class="hidden group-hover:flex flex-col border border-black rounded p-5 bg-white">
             <p>W : jump</p>
             <p>S : down</p>
             <p>Q : shotgun</p>

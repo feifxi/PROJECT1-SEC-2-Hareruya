@@ -2,6 +2,8 @@ import playerHogwartsImgSrc from "../assets/image/sprites/player-hogwarts.png";
 import playerMonkImgSrc from "../assets/image/sprites/player-monk.png";
 import playerJesusImgSrc from "../assets/image/sprites/player-jesus.png";
 import playerGraduateImgSrc from "../assets/image/sprites/player-graduate.png";
+import playerImgSrc from "../assets/image/sprites/player-default.png";
+
 
 export const luckyDrawItems = [
     { name: "Jesus", percentage: 5 },
@@ -11,6 +13,11 @@ export const luckyDrawItems = [
 ]
 
 export const shopSkins = [
+    {
+        name: "Default",
+        img: playerImgSrc,
+        price: 0,
+    },
     {
         name: "Monk",
         img: playerMonkImgSrc,
