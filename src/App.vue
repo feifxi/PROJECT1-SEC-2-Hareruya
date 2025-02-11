@@ -159,9 +159,12 @@ const buySkin = (skin) => {
   if (skin.price <= gameData.money) {
     gameData.skin.owned.push(skin.name);
     gameData.money -= skin.price;
-    console.log(gameData.skin.owned)
   }
 };
+
+const equipSkin = (skin) => {
+  gameData.skin.equipped = skin
+}
 
 
 // Set Background Theme
@@ -186,7 +189,7 @@ const setBackground = (theme) => {
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
         }">
-        Become Jesus
+        Become Unemployed
       </h1>
       <button
         class="btn mt-4 bg-black/80 py-5 px-10 text-white text-xl font-bold active:bg-black/40 ring-2 ring-white-300 rounded-full"
@@ -364,6 +367,7 @@ const setBackground = (theme) => {
                     class="btn btn-primary"
                     @click="gameData.skin.owned.includes(data.name) ? equipSkin(data) : buySkin(data)"
                     :disabled="gameData.skin.equipped.img === data.img"
+                    v-show="data.name !== 'Unemployed' || gameData.skin.owned.includes(data.name)"
                   >
                     {{ gameData.skin.owned.includes(data.name) ? 'Equip' : 'Buy now' }}
                   </button>
