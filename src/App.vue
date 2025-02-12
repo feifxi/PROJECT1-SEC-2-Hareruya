@@ -1,6 +1,8 @@
 <script setup>
 import { reactive, ref } from "vue";
 import playerImgSrc from "./assets/image/sprites/player-default.png";
+import playerShotgun from "./assets/image/sprites/shotgun.png"
+import TerInHome from "./assets/image/sprites/TerShowHome.png"
 import { initializeGame } from "./gamelogic/initializeGame";
 import { luckyDrawItems, shopSkins, tutorialData , ThemeData } from "./constants";
 
@@ -131,8 +133,8 @@ const random = () => {
         // display the result item
         luckyDrawResult.value = item.name;
         // Store the items
-        if (item.name === "Jesus" && !gameData.skin.owned.includes("Jesus")) {
-          gameData.skin.owned.push("Jesus");
+        if (item.name === "Unemployed" && !gameData.skin.owned.includes('Unemployed')) {
+          gameData.skin.owned.push('Unemployed');
         } else if (item.name === "Shotgun") {
           if (gameData.playerSkills.shotgunSkill < 10) {
             gameData.playerSkills.shotgunSkill = 10;
@@ -189,14 +191,14 @@ const setBackground = (theme) => {
     <div
       class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
       <h1
-        class="text-9xl font-extrabold text-center font-mono bg-linear-to-r/increasing from-indigo-500 to-teal-400 py-15"
+        class="text-9xl font-extrabold text-center fontHome bg-[linear-gradient(0deg,rgba(255,0,200,1)_0%,rgba(29,253,183,1)_50%,rgba(72,69,252,1)_100%)] p-5"
         :style="{
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           WebkitTextStroke: '2px white',
         }"
       >
-        Become Unemployed
+        Become <br> Unemployed
       </h1>
       
       <div class="flex justify-around text-white">
@@ -220,6 +222,7 @@ const setBackground = (theme) => {
         >
           ?
         </button>
+        <img :src="TerInHome" class="absolute w-50 left-[25%] bottom-[8%]">
       </div>
     </div>
   </section>
@@ -316,30 +319,53 @@ const setBackground = (theme) => {
   <!-- Shop Page -->
   <section
     v-else-if="page === 'shop'"
-    class="z-50 bg-black/90 w-full h-full fixed top-0 left-0 flex items-center justify-center overflow-y-scroll">
-    <div class="w-[95%] p-5 bg-base-100 rounded-xl">
-      <div class="flex justify-between pb-5">
-        <h1 class="text-5xl font-bold">Shop</h1>
-        <h1 class="text-blue-500 text-3xl font-bold">
+    class="z-50 bg-black/90 w-full h-full  fixed top-0 left-0 flex items-center justify-center overflow-y-scroll">
+    <div class="w-[90%] max-h-[90%] object-fit no-scrollbar p-8 bg-base-100 rounded-xl overflow-y-auto">
+      <div class="flex flex-col w-full justify-center text-center pb-5" >
+        <div class="justify-center flex">
+          <h1
+        class="text-7xl font-extrabold max-w-fit text-center font-mono bg-linear-to-b/increasing from-blue-600 to-sky-300" 
+        :style="{
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          WebkitTextStroke: '0.75px white',
+        }"
+      >Shop</h1></div>
+        
+      <div class="w-full flex flex-row justify-between">
+        <h1 
+        class="text-yellow-500 text-3xl font-bold"
+        :style="{
+          WebkitTextStroke: '0.5px white'
+        }">
           Money: {{ gameData.money }}$
         </h1>
         <button
-          class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50"
+          class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50 mr-5"
           @click="handleCloseShop">
           Close
-        </button>
+        </button></div>
+        
       </div>
-      <div class="grid">
-        <div class="flex w-full">
+      <div class=" ">
+        <div class="grid grid-cols-2 gap-5 p-">
           <!-- Lucky draw -->
-          <div class="p-4 flex-1 border">
-            <h2 class="font-serif text-red-500 text-2xl">Lucky Draw</h2>
-            <div class="border p-5 text-center">
+          <div class="py-4 px-8 flex-1 flex flex-col text-center  border rounded-2xl">
+            <div class="divider"><h1
+        class="text-5xl font-extrabold max-w-fit text-center font-mono bg-[linear-gradient(45deg,rgba(140,151,153,1)_0%,rgba(0,0,0,1)_50%,rgba(140,151,153,1)_100%)] mb-4" 
+        :style="{
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          WebkitTextStroke: '0.5px yellow',
+        }"
+      >Lucky Draws!</h1></div>
+            
+            <div class="border p-5 text-center rounded-2xl "  >
               {{ luckyDrawResult }}
             </div>
-            <div class="flex-col justify-items-center">
+            <div class="flex-col justify-items-center my-2">
               <button
-                class="btn bg-red-600 py-3 px-6 text-3xl text-white rounded active:bg-red-600/50 mt-3"
+                class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
                 @click="random">
                 Spin
               </button>
@@ -348,33 +374,44 @@ const setBackground = (theme) => {
           </div>
 
           <!-- Items shop -->
-          <div class="p-4 flex-1 border">
-            <h2>Items Shop</h2>
+          <div class="px-4 py-8 flex-1 flex flex-row border rounded-2xl justify-around">
+            <div class="flex flex-col text-center w-fit">
+            <h2 class="font-serif my-3 text-red-500 text-2xl">Shotgun Shop</h2>
             <h2>Shotgun Ammo</h2>
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
-            <button
-              class="btn bg-black py-2 px-4 text-white rounded active:bg-black/50"
+            <div>
+              <button
+              class="btn bg-red-600 py-1 px-4 border-1  border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
               @click="buyShotgunSkill"
             >
               Buy
             </button>
+            <p>50$ = 1 ammo</p>
+            </div>
+          </div>
+            <div class="border-1 border-red-400 w-[30%] bg-white rounded-3xl justfiy-center flex ">
+              <img :src="playerShotgun" class="object-fit justify-center text-center w-30 h-30 my-auto mx-auto" >
+            </div>        
           </div>
         </div>
 
         <!-- Skins shop -->
         <div class="p-4">
-          <h2 class="text-2xl font-bold py-4">Skins Shop</h2>
+          <h2 class="text-4xl font-bold py-4 w-full text-center underline">Skins Shop</h2>
           <!-- skin list -->
-          <div class="flex items-center justify-start gap-5">
+          <div class="flex max-w-7xl items-center justify-around gap-3 py-5 mx-auto">
             <div
               v-for="data in shopSkins"
               :key="data.id"
               class="card bg-base-300 shadow-sm">
-              <div class="card-body">
-                <div class="flex justify-between items-center">
-                  <h2 class="card-title">{{ data.name }}</h2>
-                  <h2 class="" v-if="!data.limited">{{ data.price }}</h2>
+              <div class="card-body max-h-80 border-1 border-white-300 rounded-xl">
+                <div class="flex flex-col items-center px-3  min-w-30 h-80 ">
+                  <h2 class="card-title mb-3 text-2xl ">{{ data.name }}</h2>                  
                   <h2 class="" v-if="data.limited">{{ "Limited!!" }}</h2>
+                  <figure class="border-2 border-red-400 w-30 h-30 rounded-full bg-white mb-5">
+                <img v-bind:src="data.img" class="object-fit w-20 h-20" />
+              </figure>
+
                   <button
                     class="btn btn-primary"
                     @click="gameData.skin.owned.includes(data.name) ? equipSkin(data) : buySkin(data)"
@@ -383,12 +420,12 @@ const setBackground = (theme) => {
                   >
                     {{ gameData.skin.owned.includes(data.name) ? 'Equip' : 'Buy now' }}
                   </button>
+
                 </div>
-                <p>{{ data.word }}</p>
+
+                <h2 class="text-center text-yellow-400" v-if="data.price != 0 && !gameData.skin.owned.includes(data.name)">$ {{ data.price }}</h2>
               </div>
-              <figure>
-                <img v-bind:src="data.img" alt="Shoes" class="object-cover" />
-              </figure>
+              
             </div>
           </div>
         </div>
@@ -406,7 +443,6 @@ const setBackground = (theme) => {
           class="btn bg-black/80 py-3 px-4 text-white rounded active:bg-black/50"
           @click="handleBackHome"
         >
-
           Back to home
         </button>
         <button
@@ -488,4 +524,10 @@ const setBackground = (theme) => {
   </section>
 </template>
 
-<style></style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap');
+
+.fontHome {
+  font-family: Atma;
+}
+</style>

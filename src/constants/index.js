@@ -8,7 +8,7 @@ import background2 from "../assets/image/backgrounds/background2.gif"
 import background3 from "../assets/image/backgrounds/background3.jpg"
 
 export const luckyDrawItems = [
-    { name: "Jesus", percentage: 5 },
+    { name: "Unemployed", percentage: 5},
     { name: "Shotgun", percentage: 25 },
     { name: "ExtraScore", percentage: 30 },
     { name: "Salt Muhaha", percentage: 40 },
