@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { initializeGame } from "./gamelogic/initializeGame";
-import { luckyDrawItems, shopSkins, tutorialData, themeData, shotgunAmmo } from "./constants";
+import { luckyDrawItems, shopSkins, tutorialData, themeData, shotgunAmmo, mugenStatus } from "./constants";
 import playerShotgun from "./assets/image/sprites/shotgun.png"
 import terInHome from "./assets/image/sprites/ter-show-home.png"
 
@@ -108,8 +108,8 @@ const goleft = () => {
 // Shop Section
 // Lucky draw
 const luckyDrawResult = ref("random");
-
 const random = () => {
+  gameData.money -= 150;
   const randomNumber = Math.random() * 100;
   let cumulative = 0;
   for (const item of luckyDrawItems) {
@@ -128,11 +128,14 @@ const random = () => {
         // display the result item
         luckyDrawResult.value = item.name;
         // Store the items
-        if (item.name === "Unemployed" && !gameData.skin.owned.includes('Unemployed')) {
-          gameData.skin.owned.push('Unemployed');
+        if (item.name === "Unemployed") {
+          if (!gameData.skin.owned.includes('Unemployed')) {
+            gameData.skin.owned.push('Unemployed');
+          }
+          gameData.money += 750;
         } else if (item.name === "Shotgun") {
           if (gameData.playerSkills.shotgunSkill < 10) {
-            gameData.playerSkills.shotgunSkill = 10;
+            gameData.playerSkills.shotgunSkill++;
           } else {
             gameData.money += 40;
           }
@@ -150,10 +153,8 @@ const random = () => {
 
 // ฺBuy Shotgun
 const buyShotgunSkill = () => {
-  if (gameData.playerSkills.shotgunSkill < 10 && gameData.money >= 50) {
-    gameData.money -= 50;
-    gameData.playerSkills.shotgunSkill++;
-  }
+  gameData.money -= 50;
+  gameData.playerSkills.shotgunSkill++;
 };
 
 // Buy Skin
@@ -316,36 +317,42 @@ const setBackground = (theme) => {
       <div class="flex flex-col w-full justify-center text-center pb-5" >
         <div class="justify-center flex">
           <h1
-        class="text-7xl font-extrabold max-w-fit text-center font-mono bg-linear-to-b/increasing from-blue-600 to-sky-300" 
-        :style="{
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          WebkitTextStroke: '0.75px white',
-        }"
-      >Shop</h1></div>
-        
-      <div class="w-full flex flex-row justify-between">
-        <h1 
-        class="text-yellow-500 text-3xl font-bold"
-        :style="{
-          WebkitTextStroke: '0.5px white'
-        }">
-          Money: {{ gameData.money }}$
-        </h1>
-        <button
-          class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50 mr-5"
-          @click="handleCloseShop">
-          Close
-        </button></div>
-        
+            class="text-7xl font-extrabold max-w-fit text-center font-mono bg-linear-to-b/increasing
+            from-blue-600 to-sky-300"
+            :style="{
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              WebkitTextStroke: '0.75px white',
+            }"
+          >
+            Shop
+          </h1>
+        </div>
+        <div class="w-full flex flex-row justify-between">
+          <h1 
+            class="text-yellow-500 text-3xl font-bold"
+            :style="{
+              WebkitTextStroke: '0.5px white'
+            }"
+          >
+            Money: {{ gameData.money }}$
+          </h1>
+          <button
+            class="btn bg-red-600 py-2 px-4 text-white rounded active:bg-red-600/50 mr-5"
+            @click="handleCloseShop">
+            Close
+          </button>
+        </div>
       </div>
-      <div class=" ">
+      <div>
         <div class="grid grid-cols-2 gap-5 p-">
+
           <!-- Lucky draw -->
           <div class="py-4 px-8 flex-1 flex flex-col text-center  border rounded-2xl">
             <div class="divider">
               <h1
-                class="text-5xl font-extrabold max-w-fit text-center font-mono bg-[linear-gradient(45deg,rgba(140,151,153,1)_0%,rgba(0,0,0,1)_50%,rgba(140,151,153,1)_100%)] mb-4" 
+                class="text-5xl font-extrabold max-w-fit text-center font-mono
+                bg-[linear-gradient(45deg,rgba(140,151,153,1)_0%,rgba(0,0,0,1)_50%,rgba(140,151,153,1)_100%)] mb-4" 
                 :style="{
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -360,9 +367,10 @@ const setBackground = (theme) => {
             </div>
             <div class="flex-col justify-items-center my-2">
               <button
-                class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
+                class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl
+                text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
                 @click="random"
-                :disabled="gameData.money <= 0"
+                :disabled="gameData.money <= 150"
               >
                 Spin
               </button>
@@ -373,20 +381,20 @@ const setBackground = (theme) => {
           <!-- Item shop -->
           <div class="px-4 py-8 flex-1 flex flex-row border rounded-2xl justify-around">
             <div class="flex flex-col text-center w-fit">
-            <h2 class="font-serif my-3 text-red-500 text-2xl">Shotgun Shop</h2>
-            <h2>Shotgun Ammo</h2>
-            <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
-            <div>
-              <button
-                class="btn bg-red-600 py-1 px-4 border-1  border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
-                @click="buyShotgunSkill"
-                :disabled="gameData.money <= 0 || gameData.playerSkills.shotgunSkill >= 10"
-              >
-              Buy
-            </button>
-            <p>50$ = 1 ammo</p>
+              <h2 class="font-serif my-3 text-red-500 text-2xl">Shotgun Shop</h2>
+              <h2>Shotgun Ammo</h2>
+              <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
+              <div>
+                <button
+                  class="btn bg-red-600 py-1 px-4 border-1  border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
+                  @click="buyShotgunSkill"
+                  :disabled="gameData.money <= 50 || gameData.playerSkills.shotgunSkill >= 10"
+                >
+                  Buy
+                </button>
+                <p>50$ = 1 ammo</p>
+              </div>
             </div>
-          </div>
             <div class="border-1 border-red-400 w-[30%] bg-white rounded-3xl justfiy-center flex ">
               <img :src="playerShotgun" class="object-fit justify-center text-center w-30 h-30 my-auto mx-auto" >
             </div>        
@@ -468,7 +476,7 @@ const setBackground = (theme) => {
         <!-- Skill Status -->
         <div class="absolute top-5 left-5 flex gap-3">
           <div
-            class="rounded-full text-white size-15 flex items-center justify-center"
+            class="rounded-full text-white h-15 w-25 flex items-center justify-center"
             :class="
               gameData.playerSkills.shotgunSkill > 0
                 ? 'bg-orange-500'
@@ -486,9 +494,12 @@ const setBackground = (theme) => {
             <div v-else>
               <img :src="shotgunAmmo[0]" alt="Empty Ammo Shotgun Icon" />
             </div>
+            <p class="px-2 text-xl font-bold">
+              {{ gameData.playerSkills.shotgunSkill }}
+            </p>
           </div>
           <div
-            class="rounded-full text-white size-15 flex items-center justify-center"
+            class="rounded-full text-white h-15 w-40 flex items-center justify-center"
             :class="
               gameData.playerSkills.mugen.active > 0
                 ? 'bg-blue-600'
@@ -496,13 +507,19 @@ const setBackground = (theme) => {
                 ? 'bg-gray-500'
                 : 'bg-orange-500'
             ">
-            {{
-              gameData.playerSkills.mugen.active > 0
-                ? gameData.playerSkills.mugen.active
-                : gameData.playerSkills.mugen.cooldown > 0
-                ? gameData.playerSkills.mugen.cooldown
-                : "Mugen"
-            }}
+              <img
+                v-if="gameData.playerSkills.mugen.active >= 0 || gameData.playerSkills.mugen.cooldown === 0"
+                :src="mugenStatus[0]" alt="Active Mugen Icon" />
+              <img v-else :src="mugenStatus[1]" alt="Cooldown Mugen Icon" />
+              <p class="pl-3 text-xl font-bold">
+                {{
+                  gameData.playerSkills.mugen.active > 0
+                    ? gameData.playerSkills.mugen.active
+                    : gameData.playerSkills.mugen.cooldown > 0
+                    ? gameData.playerSkills.mugen.cooldown
+                    : "Mugen"
+                }}
+              </p>
           </div>
         </div>
 
