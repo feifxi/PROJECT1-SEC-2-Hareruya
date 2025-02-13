@@ -1,11 +1,9 @@
 <script setup>
 import { reactive, ref } from "vue";
-import playerImgSrc from "./assets/image/sprites/player-default.png";
-import playerShotgun from "./assets/image/sprites/shotgun.png"
-import TerInHome from "./assets/image/sprites/TerShowHome.png"
 import { initializeGame } from "./gamelogic/initializeGame";
-import { luckyDrawItems, shopSkins, tutorialData , ThemeData } from "./constants";
-
+import { luckyDrawItems, shopSkins, tutorialData, themeData, shotgunAmmo } from "./constants";
+import playerShotgun from "./assets/image/sprites/shotgun.png"
+import terInHome from "./assets/image/sprites/ter-show-home.png"
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -14,7 +12,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 1000,
+        money: 0,
         skin: {
           equipped: shopSkins[0],
           owned: ['Default'],
@@ -23,9 +21,10 @@ const gameData = reactive(
           extraScore: false, // have extra score
           shotgunSkill: 0, // number of bullet
         },
-        theme: ThemeData[0]
+        theme: themeData[0]
       }
 );
+
 // In-memory only skill
 gameData.playerSkills.mugen = {
   active: 0,
@@ -37,13 +36,7 @@ gameData.playerSkills.mugen = {
 //   localStorage.setItem("gameData", JSON.stringify(gameData));
 // });
 
-
-// Hack Mode 
-const addMonney = () => {
-  gameData.monney = 1000;
-}
-
-const canvas = ref(null); // reference t canvas element
+const canvas = ref(null); // reference the canvas element
 let endGame = null; // Function For clean up interval and others when game is ended
 
 const startGame = () => {
@@ -90,6 +83,7 @@ const handleOpenTheme = () => {
 const handleOpenTutorial = () => {
   page.value = "tutorial";
 };
+
 const handleClosePage = () => {
   page.value = "home";
 };
@@ -104,6 +98,7 @@ const goright = () => {
     scrollslide.value.scrollLeft = 0 ;
   }
 };
+
 const goleft = () => {
   if (scrollslide.value) {
     scrollslide.value.scrollLeft -= 550;
@@ -161,7 +156,6 @@ const buyShotgunSkill = () => {
   }
 };
 
-
 // Buy Skin
 const buySkin = (skin) => {
   if (skin.price <= gameData.money) {
@@ -174,13 +168,10 @@ const equipSkin = (skin) => {
   gameData.skin.equipped = skin
 }
 
-
 // Set Background Theme
 const setBackground = (theme) => {
   gameData.theme = theme
 };
-
-
 </script>
 
 <template>
@@ -189,7 +180,8 @@ const setBackground = (theme) => {
     v-if="page === 'home'"
     class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/Home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/home-bg.gif)] bg-no-repeat bg-cover bg-bottom"
+    >
       <h1
         class="text-9xl font-extrabold text-center fontHome bg-[linear-gradient(0deg,rgba(255,0,200,1)_0%,rgba(29,253,183,1)_50%,rgba(72,69,252,1)_100%)] p-5"
         :style="{
@@ -222,7 +214,7 @@ const setBackground = (theme) => {
         >
           ?
         </button>
-        <img :src="TerInHome" class="absolute w-50 left-[25%] bottom-[8%]">
+        <img :src="terInHome" class="absolute w-50 left-[25%] bottom-[8%]">
       </div>
     </div>
   </section>
@@ -303,7 +295,7 @@ const setBackground = (theme) => {
 
       <!-- Themes -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 p-5">
-        <div v-for="(theme , index) in ThemeData" class="text-center" :key="index">
+        <div v-for="(theme, index) in themeData" class="text-center" :key="index">
           <div v-if="theme.img === ''" class=" bg-blue-100 border-b-[15px] border-b-orange-950 h-[200px]"></div>  
           <img 
             v-if="theme.img !== ''" 
@@ -351,29 +343,34 @@ const setBackground = (theme) => {
         <div class="grid grid-cols-2 gap-5 p-">
           <!-- Lucky draw -->
           <div class="py-4 px-8 flex-1 flex flex-col text-center  border rounded-2xl">
-            <div class="divider"><h1
-        class="text-5xl font-extrabold max-w-fit text-center font-mono bg-[linear-gradient(45deg,rgba(140,151,153,1)_0%,rgba(0,0,0,1)_50%,rgba(140,151,153,1)_100%)] mb-4" 
-        :style="{
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          WebkitTextStroke: '0.5px yellow',
-        }"
-      >Lucky Draws!</h1></div>
-            
+            <div class="divider">
+              <h1
+                class="text-5xl font-extrabold max-w-fit text-center font-mono bg-[linear-gradient(45deg,rgba(140,151,153,1)_0%,rgba(0,0,0,1)_50%,rgba(140,151,153,1)_100%)] mb-4" 
+                :style="{
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  WebkitTextStroke: '0.5px yellow',
+                }"
+              >
+                Lucky Draws!
+              </h1>
+            </div>
             <div class="border p-5 text-center rounded-2xl "  >
               {{ luckyDrawResult }}
             </div>
             <div class="flex-col justify-items-center my-2">
               <button
                 class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
-                @click="random">
+                @click="random"
+                :disabled="gameData.money <= 0"
+              >
                 Spin
               </button>
               <p>150$ = 1 spin</p>
             </div>
           </div>
 
-          <!-- Items shop -->
+          <!-- Item shop -->
           <div class="px-4 py-8 flex-1 flex flex-row border rounded-2xl justify-around">
             <div class="flex flex-col text-center w-fit">
             <h2 class="font-serif my-3 text-red-500 text-2xl">Shotgun Shop</h2>
@@ -381,9 +378,10 @@ const setBackground = (theme) => {
             <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
             <div>
               <button
-              class="btn bg-red-600 py-1 px-4 border-1  border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
-              @click="buyShotgunSkill"
-            >
+                class="btn bg-red-600 py-1 px-4 border-1  border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
+                @click="buyShotgunSkill"
+                :disabled="gameData.money <= 0 || gameData.playerSkills.shotgunSkill >= 10"
+              >
               Buy
             </button>
             <p>50$ = 1 ammo</p>
@@ -398,7 +396,6 @@ const setBackground = (theme) => {
         <!-- Skins shop -->
         <div class="p-4">
           <h2 class="text-4xl font-bold py-4 w-full text-center underline">Skins Shop</h2>
-          <!-- skin list -->
           <div class="flex max-w-7xl items-center justify-around gap-3 py-5 mx-auto">
             <div
               v-for="data in shopSkins"
@@ -409,9 +406,8 @@ const setBackground = (theme) => {
                   <h2 class="card-title mb-3 text-2xl ">{{ data.name }}</h2>                  
                   <h2 class="" v-if="data.limited">{{ "Limited!!" }}</h2>
                   <figure class="border-2 border-red-400 w-30 h-30 rounded-full bg-white mb-5">
-                <img v-bind:src="data.img" class="object-fit w-20 h-20" />
-              </figure>
-
+                    <img v-bind:src="data.img" class="object-fit w-20 h-20" />
+                  </figure>
                   <button
                     class="btn btn-primary"
                     @click="gameData.skin.owned.includes(data.name) ? equipSkin(data) : buySkin(data)"
@@ -420,17 +416,16 @@ const setBackground = (theme) => {
                   >
                     {{ gameData.skin.owned.includes(data.name) ? 'Equip' : 'Buy now' }}
                   </button>
-
                 </div>
-
-                <h2 class="text-center text-yellow-400" v-if="data.price != 0 && !gameData.skin.owned.includes(data.name)">$ {{ data.price }}</h2>
+                <h2
+                  class="text-center text-yellow-400" v-if="data.price != 0 && !gameData.skin.owned.includes(data.name)"
+                >
+                  ${{ data.price }}
+                </h2>
               </div>
-              
             </div>
           </div>
         </div>
-
-        <!-- add more... -->
       </div>
     </div>
   </section>
@@ -479,7 +474,18 @@ const setBackground = (theme) => {
                 ? 'bg-orange-500'
                 : 'bg-gray-500'
             ">
-            {{ gameData.playerSkills.shotgunSkill }}
+            <div v-if="gameData.playerSkills.shotgunSkill > 7">
+              <img :src="shotgunAmmo[3]" alt="3 Ammo Shotgun Icon" />
+            </div>
+            <div v-else-if="gameData.playerSkills.shotgunSkill > 3">
+              <img :src="shotgunAmmo[2]" alt="2 Ammo Shotgun Icon" />
+            </div>
+            <div v-else-if="gameData.playerSkills.shotgunSkill > 0">
+              <img :src="shotgunAmmo[1]" alt="1 Ammo Shotgun Icon" />
+            </div>
+            <div v-else>
+              <img :src="shotgunAmmo[0]" alt="Empty Ammo Shotgun Icon" />
+            </div>
           </div>
           <div
             class="rounded-full text-white size-15 flex items-center justify-center"

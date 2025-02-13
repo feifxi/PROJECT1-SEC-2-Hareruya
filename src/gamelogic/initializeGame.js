@@ -6,7 +6,7 @@ import fivemEnemyImgSrc from "../assets/image/sprites/fivem-enemy.png";
 import instagramImgSrc from "../assets/image/sprites/instagram-enemy.png";
 import shotgunImgSrc from "../assets/image/sprites/shotgun.png";
 import mugenImgSrc from "../assets/image/sprites/mugen.png";
-import shotgunSound from '../assets/sounds/shotgun.mp4'
+import shotgunSound from '../assets/sounds/shotgun.mp4';
 
 export const initializeGame = (canvas, gameData) => {
   // Canvas Setup
@@ -241,6 +241,12 @@ export const initializeGame = (canvas, gameData) => {
           }
         }, 1000);
       }, 5000);
+    } else if (e.code === "F2") {
+      // Cheat Money (Debug) 
+      gameData.money += 1000;
+    } else if (e.code === "F4") {
+      // Reset Money
+      gameData.money = 0;
     }
   };
 
