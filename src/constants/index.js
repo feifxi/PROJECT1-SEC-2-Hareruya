@@ -10,6 +10,8 @@ import shotgunNoAmmo from "../assets/image/sprites/shotgun-no-ammo.png";
 import shotgun1Ammo from "../assets/image/sprites/shotgun-1-ammo.png";
 import shotgun2Ammo from "../assets/image/sprites/shotgun-2-ammo.png";
 import shotgun3Ammo from "../assets/image/sprites/shotgun-3-ammo.png";
+import mugenActive from "../assets/image/sprites/mugen-active.png";
+import mugenCooldown from "../assets/image/sprites/mugen-cooldown.png";
 
 export const luckyDrawItems = [
     { name: "Unemployed", percentage: 5},
@@ -88,4 +90,9 @@ export const shotgunAmmo = [
     shotgun1Ammo,
     shotgun2Ammo,
     shotgun3Ammo
+];
+
+export const mugenStatus = [
+    mugenActive,
+    mugenCooldown
 ];

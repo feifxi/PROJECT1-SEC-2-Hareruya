@@ -6,7 +6,10 @@ import fivemEnemyImgSrc from "../assets/image/sprites/fivem-enemy.png";
 import instagramImgSrc from "../assets/image/sprites/instagram-enemy.png";
 import shotgunImgSrc from "../assets/image/sprites/shotgun.png";
 import mugenImgSrc from "../assets/image/sprites/mugen.png";
-import shotgunSound from '../assets/sounds/shotgun.mp4';
+import shotgunSound1 from '../assets/sounds/shotgun1.mp4';
+import shotgunSound2 from '../assets/sounds/shotgun2.mp4';
+import shotgunSound3 from '../assets/sounds/shotgun3.mp4';
+import mugenSound from "../assets/sounds/mugen.mp4";
 
 export const initializeGame = (canvas, gameData) => {
   // Canvas Setup
@@ -30,6 +33,15 @@ export const initializeGame = (canvas, gameData) => {
   const defaultWidth = 62;
   const defaultHeight = 76;
   const defaultY = boardH - 76;
+
+  // Skill Sfx
+  // Shotgun
+  const shotgunSfx1 = new Audio(shotgunSound1);
+  const shotgunSfx2 = new Audio(shotgunSound2);
+  const shotgunSfx3 = new Audio(shotgunSound3);
+
+  // Mugen
+  const mugenSfx = new Audio(mugenSound);
 
   const player = {
     w: defaultWidth,
@@ -203,9 +215,13 @@ export const initializeGame = (canvas, gameData) => {
         player.w = defaultWidth;
       }, 500);
 
-      // Play sound effect
-      const sound = new Audio(shotgunSound)
-      sound.play()
+      // Play Shotgun sfx
+      const shotgunSfx = [
+        shotgunSfx1,
+        shotgunSfx2,
+        shotgunSfx3
+      ];
+      shotgunSfx[Math.floor(Math.random() * 3)].play();
 
     } else if (
       e.code === "KeyE" &&
@@ -216,6 +232,9 @@ export const initializeGame = (canvas, gameData) => {
       player.w = 108;
       player.h = 107;
       player.baseY = defaultY - 31;
+
+      // Play Mugen sfx
+      mugenSfx.play();
 
       // Show countdown for active skill
       gameData.playerSkills.mugen.active = 5;
@@ -258,8 +277,8 @@ export const initializeGame = (canvas, gameData) => {
 
   // Return cleanup function
   return () => {
-    gameData.playerSkills.mugen.active = 0
-    gameData.playerSkills.mugen.cooldown = 0
+    gameData.playerSkills.mugen.active = 0;
+    gameData.playerSkills.mugen.cooldown = 0;
     cancelAnimationFrame(animationFrameId);
     clearInterval(enemyInterval);
     clearInterval(speedInterval);
