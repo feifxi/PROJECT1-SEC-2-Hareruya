@@ -50,19 +50,19 @@ export const shopSkins = [
 
 export const tutorialData = [
     {
-        img: "To1.jpg",
+        img: "TutorialVideo1.gif",
         label: "About game",
-        description: "Press the W button to make your character jump over obstacles and S to make it down. If you hit an obstacle, the game will end. As you run and got enough score you will get coin to purchase skills and skin"
+        description: "Press W to jump and S to duck. Hitting an obstacle ends the game. Earn 10 coins every 100 scroe to buy skills and skins."
     },
     {
-        img: "To2.jpg",
-        label: "Shop and skills",
-        description: "When you collect enough coins, you can purchase Skins or Skills from the Shop. Additionally, you can buy random Skins. In terms of Skills, you can acquire the Shotgun skill to use during your runs or the Mugen skill, which blocks everything for you. As for Skins, there are various options available, ranging from Gojo to Jesus."
+        img: "TutorialVideo2.gif",
+        label: "Shop and skins",
+        description: "Collect coins to buy Skins or ammo from the Shop. You can random to get limited Skin or buy shotgun ammo for attacks"
     },
     {
-        img: "To3.jpg",
+        img: "TutorialVideo3.gif",
         label: "Skills",
-        description: "There are two Skills you can use: press Q to activate the Shotgun skill, which breaks the next obstacle, and press E to use the Mugen skill, making you invisible for 5 seconds. Both Skills can be purchased from the Shop Enjoy the game, and keep jumping until you become Jesus!"
+        description: "Press Q for aim Shotgun to break the next obstacle and E for Mugen to be invisible for 5 seconds. Buy shotgun ammo from the Shop. Keep jumping until you become Unemployed!"
     }
 ];
 

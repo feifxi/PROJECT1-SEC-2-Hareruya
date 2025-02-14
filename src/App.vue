@@ -12,7 +12,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 0,
+        money: 10000,
         skin: {
           equipped: shopSkins[0],
           owned: ['Default'],
@@ -196,25 +196,26 @@ const setBackground = (theme) => {
       
       <div class="flex justify-around text-white">
         <button
-          class="btn btn-circle py-7 px-10 text-xl bg-black/80  active:bg-black/50 float-right text-center ring-2 ring-white-300"
-          @click="handleOpenTheme"
-        >
-          theme
-        </button>
-        <button
-          class="btn btn-circle w-[200px] h-[100px] bg-black/80  text-6xl font-bold active:bg-black/40 ring-2 ring-white-300"
-          :style="{ WebkitTextStroke: '0.35px blue' }"
-          @click="handleStartGame"
-        >
-          Start
-        </button>
-
-        <button
-          class="btn btn-circle p-7 text-xl bg-black/80 active:bg-black/50 float-right text-center ring-2 ring-white-300"
+          class="absolute top-[10%] right-[10%] btn btn-circle p-7 text-xl bg-black/80 active:bg-black/50 float-right text-center ring-2 ring-white-300"
           @click="handleOpenTutorial"
         >
           ?
         </button>
+        <div class="grid w-full text-center justify-center ">
+          <button
+          class="btn btn-circle w-[200px] h-[100px] bg-black/80 pb-3  text-7xl font-bold active:bg-black ring-2 ring-white-300"
+          :style="{ WebkitTextStroke: '0.35px blue' }"
+          @click="handleStartGame"
+        >
+          Play
+        </button>
+          <button
+          class="btn btn-circle py-7 px-15 text-l bg-black/80  active:bg-black/50  ring-2 ring-white-300 mx-auto mt-5"
+          @click="handleOpenTheme"
+        >
+          Background
+        </button>
+        </div>              
         <img :src="terInHome" class="absolute w-50 left-[25%] bottom-[8%]">
       </div>
     </div>
@@ -241,8 +242,8 @@ const setBackground = (theme) => {
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
               id="slide-link">
               <img
-                :src="`/src/assets/image/backgrounds/${data.img}`"
-                class="w-full rounded-lg aspect-video object-cover mb-3"
+                :src="`/src/assets/image/tutorials/${data.img}`"
+                class="w-full rounded-lg aspect-video object-fit mb-3"
                 id="slide-image" />
               <p
                 class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
