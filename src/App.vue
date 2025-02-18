@@ -1,16 +1,16 @@
 <script setup>
 import { reactive, ref } from "vue";
-import { initializeGame } from "./gamelogic/initializeGame";
+import { initializeGame } from "/src/gamelogic/initializeGame";
 import {
   luckyDrawItems,
   shopSkins,
   tutorialData,
   themeData,
   shotgunAmmo,
-  mugenStatus,
-} from "./constants";
-import playerShotgun from "./assets/image/sprites/shotgun.png";
-import terInHome from "./assets/image/sprites/ter-show-home.png";
+  mugenStatus
+} from "/src/constants";
+import playerShotgun from "/src/assets/image/sprites/shotgun.png";
+import terInHome from "/src/assets/image/sprites/ter-show-home.png";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -19,7 +19,7 @@ const gameData = reactive(
     ? JSON.parse(savedData)
     : {
         highScore: 0,
-        money: 10000,
+        money: 0,
         skin: {
           equipped: shopSkins[0],
           owned: ["Default"],
@@ -28,20 +28,20 @@ const gameData = reactive(
           extraScore: false, // have extra score
           shotgunSkill: 0, // number of bullet
         },
-        theme: themeData[0],
+        theme: themeData[0]
       }
 );
 
 // In-memory only skill
 gameData.playerSkills.mugen = {
   active: 0,
-  cooldown: 0,
+  cooldown: 0
 };
 
 // Save Game Data before player exit
-// window.addEventListener("beforeunload", (e) => {
-//   localStorage.setItem("gameData", JSON.stringify(gameData));
-// });
+window.addEventListener("beforeunload", (e) => {
+  localStorage.setItem("gameData", JSON.stringify(gameData));
+});
 
 const canvas = ref(null); // reference the canvas element
 let endGame = null; // Function For clean up interval and others when game is ended
@@ -97,19 +97,26 @@ const handleClosePage = () => {
 
 // Tutorial Section
 const scrollslide = ref(null);
-
-const goright = () => {
+let tutorialIndex = 1;
+const goRight = () => {
   if (scrollslide.value) {
     scrollslide.value.scrollLeft += 550;
+    tutorialIndex++;
   }
-  if (scrollslide.value.scrollLeft > 1000) {
+  if (scrollslide.value.scrollLeft === 1200 && tutorialIndex > tutorialData.length) {
     scrollslide.value.scrollLeft = 0;
+    tutorialIndex = 1;
   }
 };
 
-const goleft = () => {
-  if (scrollslide.value) {
+const goLeft = () => {
+  if (scrollslide.value !== 0 && tutorialIndex !== 0) {
     scrollslide.value.scrollLeft -= 550;
+    tutorialIndex--;
+  }
+  if (scrollslide.value.scrollLeft === 0 && tutorialIndex <= 0) {
+    scrollslide.value.scrollLeft = 1200;
+    tutorialIndex = tutorialData.length;
   }
 };
 
@@ -269,21 +276,21 @@ const setBackground = (theme) => {
                 <div class="flex flex-col">
                   <div class="my-3 flex flex-row justify-around">
                     <button
-                      v-on:click="goleft"
-                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
+                      v-on:click="goLeft"
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer hover:bg-blue-500 hover:text-white">
                       <
                     </button>
                     <button
-                      v-on:click="goright"
-                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
+                      v-on:click="goRight"
+                      class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer hover:bg-blue-500 hover:text-white">
                       >
                     </button>
                   </div>
                   <div class="justify-center align-center flex flex-row">
                     <button
                       @click="handleClosePage"
-                      class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer group-hover:bg-blue-500 group-hover:text-white">
-                      back
+                      class="h-8 w-18 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer hover:bg-blue-500 hover:text-white">
+                      Back
                     </button>
                   </div>
                 </div>
@@ -593,7 +600,7 @@ const setBackground = (theme) => {
           </div>
         </div>
 
-        <!-- Tooltip   -->
+        <!-- Tooltip  -->
         <div
           class="absolute right-5 top-5 group cursor-pointer inline-block text-black font-bold transition duration-500">
           <div
