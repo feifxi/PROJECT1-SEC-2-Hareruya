@@ -98,7 +98,7 @@ const handleClosePage = () => {
 // Tutorial Section
 const scrollslide = ref(null);
 let tutorialIndex = 1;
-const goright = () => {
+const goRight = () => {
   if (scrollslide.value) {
     scrollslide.value.scrollLeft += 550;
     tutorialIndex++;
@@ -109,7 +109,7 @@ const goright = () => {
   }
 };
 
-const goleft = () => {
+const goLeft = () => {
   if (scrollslide.value !== 0 && tutorialIndex !== 0) {
     scrollslide.value.scrollLeft -= 550;
     tutorialIndex--;
@@ -276,12 +276,12 @@ const setBackground = (theme) => {
                 <div class="flex flex-col">
                   <div class="my-3 flex flex-row justify-around">
                     <button
-                      v-on:click="goleft"
+                      v-on:click="goLeft"
                       class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer hover:bg-blue-500 hover:text-white">
                       <
                     </button>
                     <button
-                      v-on:click="goright"
+                      v-on:click="goRight"
                       class="h-8 w-8 rounded-full border-1 border-blue-500 text-blue-400 mx-2 my-1 curser-pointer hover:bg-blue-500 hover:text-white">
                       >
                     </button>
