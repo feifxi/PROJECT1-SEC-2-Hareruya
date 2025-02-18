@@ -1,15 +1,15 @@
-import { onEnemieCollision, onScoreCollision } from "./collision";
-import facebookEnemyImgSrc from "../assets/image/sprites/facebook-enemy.png";
-import robloxEnemyImgSrc from "../assets/image/sprites/roblox-enemy.png";
-import tiktokEnemyImgSrc from "../assets/image/sprites/tiktok-enemy.png";
-import fivemEnemyImgSrc from "../assets/image/sprites/fivem-enemy.png";
-import instagramImgSrc from "../assets/image/sprites/instagram-enemy.png";
-import shotgunImgSrc from "../assets/image/sprites/shotgun.png";
-import mugenImgSrc from "../assets/image/sprites/mugen.png";
-import shotgunSound1 from '../assets/sounds/shotgun1.mp4';
-import shotgunSound2 from '../assets/sounds/shotgun2.mp4';
-import shotgunSound3 from '../assets/sounds/shotgun3.mp4';
-import mugenSound from "../assets/sounds/mugen.mp4";
+import { onEnemieCollision, onScoreCollision } from "/src/gamelogic/collision";
+import facebookEnemyImgSrc from "/src/assets/image/sprites/enemies/enemy-facebook.png";
+import robloxEnemyImgSrc from "/src/assets/image/sprites/enemies/enemy-roblox.png";
+import tiktokEnemyImgSrc from "/src/assets/image/sprites/enemies/enemy-tiktok.png";
+import fivemEnemyImgSrc from "/src/assets/image/sprites/enemies/enemy-fivem.png";
+import instagramImgSrc from "/src/assets/image/sprites/enemies/enemy-instagram.png";
+import shotgunImgSrc from "/src/assets/image/sprites/skills/skill-shotgun.png";
+import mugenImgSrc from "/src/assets/image/sprites/skills/skill-mugen.png";
+import shotgunSound1 from '/src/assets/sounds/shotgun1.mp4';
+import shotgunSound2 from '/src/assets/sounds/shotgun2.mp4';
+import shotgunSound3 from '/src/assets/sounds/shotgun3.mp4';
+import mugenSound from "/src/assets/sounds/mugen.mp4";
 
 export const initializeGame = (canvas, gameData) => {
   // Canvas Setup
@@ -49,7 +49,7 @@ export const initializeGame = (canvas, gameData) => {
     x: 50,
     y: defaultY, // start at the ground
     baseY: defaultY, // ground postion of player (board height - player height)
-    img: defaultPlayerImg,
+    img: defaultPlayerImg
   };
 
   // Enemy Model Setup
@@ -79,7 +79,7 @@ export const initializeGame = (canvas, gameData) => {
     x: 920,
     y: boardH - 105,
     img: tiktokEnemyImg,
-    speed: -3, // speed to the left side of canvas
+    speed: -3 // speed to the left side of canvas
   };
 
   const enemyArray = []; // contain all the enemy in the map  
@@ -87,7 +87,7 @@ export const initializeGame = (canvas, gameData) => {
   // Physics Setup
   const physics = {
     velocityY: 0, // ความแรงในการกระโดด
-    gravity: 0.23,
+    gravity: 0.23
   };
 
 
@@ -110,10 +110,13 @@ export const initializeGame = (canvas, gameData) => {
     if (gameData.playerSkills.extraScore) {
       context.fillStyle = "red";
       context.fillText("x2", boardW / 2 - 90, 30);
-      context.fillStyle = "black";
+      context.fillStyle = "white";
+      context.fillText("Score : " + score, boardW / 2 - 60, 30);
       context.fillText("Score : " + score, boardW / 2 - 60, 30);
     } else {
       context.fillText("Score : " + score, boardW / 2 - 50, 30);
+      context.strokeStyle = "orange";
+      context.strokeText("Score : " + score, boardW / 2 - 50, 30);
     }
 
     // Handle Player Movement
