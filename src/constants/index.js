@@ -12,6 +12,9 @@ import shotgun2Ammo from "/src/assets/images/sprites/skills/skill-shotgun-2-ammo
 import shotgun3Ammo from "/src/assets/images/sprites/skills/skill-shotgun-3-ammo.png";
 import mugenActive from "/src/assets/images/sprites/skills/skill-mugen-active.png";
 import mugenCooldown from "/src/assets/images/sprites/skills/skill-mugen-cooldown.png";
+import tutorialVideo1 from "/src/assets/images/tutorials/tutorial-video1.gif";
+import tutorialVideo2 from "/src/assets/images/tutorials/tutorial-video2.gif";
+import tutorialVideo3 from "/src/assets/images/tutorials/tutorial-video3.gif";
 
 export const luckyDrawItems = [
     { name: "Unemployed", percentage: 5},
@@ -50,17 +53,17 @@ export const shopSkins = [
 
 export const tutorialData = [
     {
-        img: "tutorial-video1.gif",
+        img: tutorialVideo1,
         label: "About game",
         description: "Press W to jump and S to duck. Hitting an obstacle ends the game. Earn 10 coins every 100 score to buy skills and skins."
     },
     {
-        img: "tutorial-video2.gif",
+        img: tutorialVideo2,
         label: "Shop and skins",
         description: "Collect coins to buy Skins or Shotgun ammo from the Shop. You can try your luck on \"Lucky Draws!\" to get Limited Skin, a Shotgun ammo and more."
     },
     {
-        img: "tutorial-video3.gif",
+        img: tutorialVideo3,
         label: "Skills",
         description: "Press Q to use Shotgun to destroy the obstacles and E for Mugen to bypass obstacles for 5 seconds. Buy Shotgun ammo from the Shop. Keep jumping until you become \"Unemployed\"!"
     }

@@ -262,7 +262,7 @@ const setBackground = (theme) => {
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
               id="slide-link">
               <img
-                :src="`/src/assets/images/tutorials/${data.img}`"
+                :src="data.img"
                 class="w-full rounded-lg aspect-video object-fit mb-3"
                 id="slide-image"
               />
