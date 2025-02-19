@@ -36,6 +36,16 @@
   - Game Canvas
   - Saved Game Data
 
+## Tutorial   
+### Objective 
+- of this game is to 
+### Basic Controls
+- "W" : Jump
+- "S" : Dive
+- "Q" : Use Shotgun Skill
+- "E" : Use Mugen Skill (Barrier)
+- "Space" : Restart Game
+
 ## Demo features
 [Watch the video](https://drive.google.com/file/d/YOUR_VIDEO_ID/view)
 
