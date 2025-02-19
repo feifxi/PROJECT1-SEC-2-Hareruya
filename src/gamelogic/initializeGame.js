@@ -209,6 +209,7 @@ export const initializeGame = (canvas, gameData) => {
     ) {
       enemyArray.splice(0, enemyArray.length);
       gameData.playerSkills.shotgunSkill -= 1;
+      score += 100;
 
       // change player img skin
       player.img = shotgun;
