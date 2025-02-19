@@ -9,8 +9,8 @@ import {
   shotgunAmmo,
   mugenStatus
 } from "/src/constants";
-import playerShotgun from "/src/assets/image/sprites/skills/skill-shotgun.png";
-import terInHome from "/src/assets/image/sprites/ter-show-home.png";
+import playerShotgun from "/src/assets/images/sprites/skills/skill-shotgun.png";
+import terInHome from "/src/assets/images/sprites/ter-show-home.png";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
 // Game Data State
@@ -205,7 +205,7 @@ const setBackground = (theme) => {
     v-if="page === 'home'"
     class="z-50 z- bg-black/90 w-full h-screen fixed top-0 left-0 flex items-center justify-center">
     <div
-      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(src/assets/image/backgrounds/home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
+      class="w-full max-w-[97%] h-[calc(100vh-3rem)] border border-white gap-10 items-center justify-center p-10 rounded-xl bg-[url(/src/assets/images/backgrounds/home-bg.gif)] bg-no-repeat bg-cover bg-bottom">
       <h1
         class="text-9xl font-extrabold text-center fontHome bg-[linear-gradient(0deg,rgba(255,0,200,1)_0%,rgba(29,253,183,1)_50%,rgba(72,69,252,1)_100%)] p-5"
         :style="{
@@ -262,9 +262,10 @@ const setBackground = (theme) => {
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
               id="slide-link">
               <img
-                :src="`/src/assets/image/tutorials/${data.img}`"
+                :src="data.img"
                 class="w-full rounded-lg aspect-video object-fit mb-3"
-                id="slide-image" />
+                id="slide-image"
+              />
               <p
                 class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
                 {{ data.label }}
