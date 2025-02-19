@@ -395,7 +395,8 @@ const setBackground = (theme) => {
               <button
                 class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
                 @click="random"
-                :disabled="gameData.money <= 150">
+                :disabled="gameData.money < 150"
+              >
                 Spin
               </button>
               <p>150$ = 1 spin</p>
@@ -442,7 +443,7 @@ const setBackground = (theme) => {
                   class="btn bg-red-600 py-1 px-4 border-1 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
                   @click="buyShotgunSkill"
                   :disabled="
-                    gameData.money <= 50 ||
+                    gameData.money < 50 ||
                     gameData.playerSkills.shotgunSkill >= 10
                   ">
                   Buy
