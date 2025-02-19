@@ -9,7 +9,7 @@ import {
   shotgunAmmo,
   mugenStatus
 } from "/src/constants";
-import playerShotgun from "/src/assets/image/sprites/shotgun.png";
+import playerShotgun from "/src/assets/image/sprites/skills/skill-shotgun.png";
 import terInHome from "/src/assets/image/sprites/ter-show-home.png";
 
 const savedData = localStorage.getItem("gameData"); // retrive data from localstorage if exist
