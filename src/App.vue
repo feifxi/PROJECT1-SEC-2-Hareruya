@@ -200,7 +200,7 @@ const setBackground = (theme) => {
 </script>
 
 <template>
-  <div data-theme="dark">
+  <div jeme="dark">
     <!-- Home Page -->
     <section
       v-if="page === 'home'"
@@ -313,7 +313,7 @@ const setBackground = (theme) => {
         class="relative rounded-xl bg-white p-5 pt-10 flex flex-col items-center">
         <button
           @click="handleClosePage"
-          class="btn btn-accent absolute right-10 top-3">
+          class="btn absolute right-10 top-3 bg-red-600 text-white rounded active:bg-red-600/50">
           Back
         </button>
 
@@ -395,7 +395,7 @@ const setBackground = (theme) => {
               </div>
               <div class="flex-col justify-items-center my-2">
                 <button
-                  class="btn bg-red-600 py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
+                  class="btn btn-success py-1 px-4 border-1 mb-2 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 mt-3"
                   @click="random"
                   :disabled="gameData.money < 150"
                 >
@@ -435,14 +435,14 @@ const setBackground = (theme) => {
             <div
               class="px-4 py-8 flex-1 flex flex-row border rounded-2xl justify-around">
               <div class="flex flex-col text-center w-fit">
-                <h2 class="font-serif my-3 text-red-500 text-2xl">
+                <h2 class="font-serif my-3 text-yellow-500 text-2xl">
                   Shotgun Shop
                 </h2>
                 <h2>Shotgun Ammo</h2>
                 <p>Amount: {{ gameData.playerSkills.shotgunSkill }}</p>
                 <div>
                   <button
-                    class="btn bg-red-600 py-1 px-4 border-1 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
+                    class="btn btn-success py-1 px-4 border-1 border-white text-3xl text-white rounded-2xl w-fit h-fit active:bg-red-600/50 my-3"
                     @click="buyShotgunSkill"
                     :disabled="
                       gameData.money < 50 ||
@@ -483,13 +483,14 @@ const setBackground = (theme) => {
                       <img v-bind:src="data.img" class="object-fit w-20 h-20" />
                     </figure>
                     <button
-                      class="btn btn-primary"
+                      class="btn btn-success text-white"
                       @click="
                         gameData.skin.owned.includes(data.name)
                           ? equipSkin(data)
                           : buySkin(data)
                       "
-                      :disabled="gameData.skin.equipped.img === data.img"
+                      :disabled="gameData.skin.equipped.img === data.img
+                      || gameData.money < data.price"
                       v-show="
                         data.name !== 'Unemployed' ||
                         gameData.skin.owned.includes(data.name)
