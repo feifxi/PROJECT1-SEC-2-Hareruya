@@ -49,3 +49,7 @@ $${\color{lightgreen}Become\ Unemployed}$$ is a 2D platformer game with a main g
 ## Demo features
 [Watch the video](https://drive.google.com/file/d/1HmfR6aI8srxoZauXERKw-J6CH7ShcmMo/view?usp=drive_link)
 
+
+## References
+- Kongruksiam
+https://youtu.be/D94ei4mwHqs?si=XFrgX9cztMZLDGdx
