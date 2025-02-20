@@ -6,6 +6,9 @@ import playerGraduateImgSrc from "/src/assets/image/sprites/players/player-gradu
 import backgroundGrassyTerrain from "/src/assets/image/backgrounds/background1.jpg";
 import backgroundEveningHorizon from "/src/assets/image/backgrounds/background2.gif";
 import backgroundBeuatifulDusk from "/src/assets/image/backgrounds/background3.jpg";
+import tutorialgif1 from "/src/assets/image/tutorials/tutorial-video1.gif";
+import tutorialgif2 from "/src/assets/image/tutorials/tutorial-video2.gif";
+import tutorialgif3 from "/src/assets/image/tutorials/tutorial-video3.gif";
 import shotgunNoAmmo from "/src/assets/image/sprites/skills/skill-shotgun-no-ammo.png";
 import shotgun1Ammo from "/src/assets/image/sprites/skills/skill-shotgun-1-ammo.png";
 import shotgun2Ammo from "/src/assets/image/sprites/skills/skill-shotgun-2-ammo.png";
@@ -50,17 +53,17 @@ export const shopSkins = [
 
 export const tutorialData = [
     {
-        img: "tutorial-video1.gif",
+        img: tutorialgif1,
         label: "About game",
         description: "Press W to jump and S to duck. Hitting an obstacle ends the game. Earn 10 coins every 100 scroe to buy skills and skins."
     },
     {
-        img: "tutorial-video2.gif",
+        img: tutorialgif2,
         label: "Shop and skins",
         description: "Collect coins to buy Skins or ammo from the Shop. You can random to get limited Skin or buy shotgun ammo for attacks"
     },
     {
-        img: "tutorial-video3.gif",
+        img: tutorialgif3,
         label: "Skills",
         description: "Press Q for aim Shotgun to break the next obstacle and E for Mugen to be invisible for 5 seconds. Buy shotgun ammo from the Shop. Keep jumping until you become Unemployed!"
     }

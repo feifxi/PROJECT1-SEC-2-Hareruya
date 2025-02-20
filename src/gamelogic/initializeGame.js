@@ -206,9 +206,11 @@ export const initializeGame = (canvas, gameData) => {
       e.code === "KeyQ" &&
       gameData.playerSkills.shotgunSkill > 0 &&
       gameData.playerSkills.mugen.active <= 0
+      
     ) {
       enemyArray.splice(0, enemyArray.length);
       gameData.playerSkills.shotgunSkill -= 1;
+      score += 100
 
       // change player img skin
       player.img = shotgun;

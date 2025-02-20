@@ -252,7 +252,8 @@ const setBackground = (theme) => {
         <ul
           class="max-w-150 no-scrollbar h-180 flex my-20 overflow-x-auto aspect-video snap-x scroll-smooth"
           id="slide-list"
-          ref="scrollslide">
+          ref="scrollslide"
+         >
           <li
             class="list-style-none group min-w-150 my-auto snap-start object-cover h-full"
             id="slide-item1"
@@ -262,9 +263,9 @@ const setBackground = (theme) => {
               class="w-full rounded-xl bg-white p-5 text-none border-1 hover:border-blue-300 h-full flex flex-col min-h-175"
               id="slide-link">
               <img
-                :src="`/src/assets/image/tutorials/${data.img}`"
+                :src="data.img"
                 class="w-full rounded-lg aspect-video object-fit mb-3"
-                id="slide-image" />
+                id="slide-image"/>
               <p
                 class="text-blue-500 font-medium px-2 py-1 mx-1 mb-4 mt-2 bg-blue-100 rounded-full w-fit border-1 text-xs">
                 {{ data.label }}
