@@ -2,8 +2,11 @@
 
 <img src="https://github.com/user-attachments/assets/1a4d0996-0ed6-4f85-a7e7-e12ac35b3322" alt="Game Unemployed" width="500" />
 
+[Visit This Game](https://project-1-sec-2-hareruya.vercel.app/)
+
 ## About
 $${\color{lightgreen}Become\ Unemployed}$$ is a 2D platformer game with a main goal of becoming "**Unemployed**". Avoid various obstacles to earn scores, which can be converted to money after you die by colliding with said obstacles. Use money to buy "Shotgun Ammo, skins and ~~gamble~~ try your luck to become "**Unemployed**"!
+
 
 ## List Features
 - Game Canvas
